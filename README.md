@@ -1,2 +1,2 @@
 # cobblemon-cobblestats
-Brings Showdown-like stats and terrain info 
+Brings Showdown-like stats and terrain info to Cobblemon battles
