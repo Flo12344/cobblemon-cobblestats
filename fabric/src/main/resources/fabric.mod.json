@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "cobblestats",
+  "version": "${version}",
+  "name": "Cobblemon: CobbleStats",
+  "description": "Brings Showdown-like stats/terrain info in battles",
+  "authors": [
+    "Flo_12344"
+  ],
+  "license": "MIT License",
+  "icon": "assets/cobblestats/logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "io.github.flo12344.cobblestats.CobbleStats"
+    ]
+  },
+  "mixins": [
+    "cobblestats.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "1.21.1",
+    "cobblemon": ">=1.6.0"
+  }
+}

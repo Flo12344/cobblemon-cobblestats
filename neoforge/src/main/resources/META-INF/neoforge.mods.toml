@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+issueTrackerURL = "https://github.com/Flo12344/cobblemon-cobblestats/issues"
+license = "GPL-3.0"
+
+[[mods]]
+modId = "cobblestats"
+version = "${version}"
+displayName = "Cobblemon: CobbleStats"
+authors = "Flo_12344"
+description = '''
+Brings Showdown-like stats/terrain info in battles
+'''
+logoFile = "assets/cobblestats/logo.png"
+
+[[dependencies.cobblestats]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.21.1]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblestats]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[21.1.66,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblestats]]
+modId = "cobblemon"
+mandatory = true
+versionRange = "[1.6,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "cobblestats.mixins.json"
