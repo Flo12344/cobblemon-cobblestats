@@ -1,6 +1,5 @@
 package io.github.flo12344.cobblestats.common;
 
-import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon;
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket;
@@ -45,8 +44,16 @@ public class BattleProcess {
         float g = ((hue >> 8) & 0b11111111) / 255F;
         float b = (hue & 0b11111111) / 255F;
 
+        String key;
+        var value = activeBattlePokemon.getBattlePokemon().getDisplayName().getContents();
+        if(value instanceof TranslatableContents)
+        {
+            key = ((TranslatableContents) value).getKey();
+        }
+        else {
+            key = ((PlainTextContents.LiteralContents) value).text();
+        }
 
-        String key = ((TranslatableContents) activeBattlePokemon.getBattlePokemon().getDisplayName().getContents()).getKey();
         if(activeBattlePokemon.getBattlePokemon().getActor().getDisplayName().getContents() instanceof PlainTextContents.LiteralContents(String text1))
         {
             key = text1 + "/" + key;
@@ -167,12 +174,28 @@ public class BattleProcess {
                 String switchedTo;
                 if(MainActionSplit[3].equals("self"))
                 {
-                    String pokemon = ((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey();
+                    String pokemon;
+                    if(object_args[0] instanceof MutableComponent){
+                        pokemon = ((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey();
+                    }
+                    else
+                    {
+                        pokemon = (String) object_args[0];
+                    }
                     String owner = Minecraft.getInstance().player.getDisplayName().getString();
                     switchedTo = owner +"/"+pokemon;
                 }
                 else {
-                    switchedTo = object_args[0] + "/" + ((TranslatableContents) ((MutableComponent) object_args[1]).getContents()).getKey();
+                    String pokemon;
+                    if(object_args[1] instanceof MutableComponent){
+                        pokemon = ((TranslatableContents) ((MutableComponent) object_args[1]).getContents()).getKey();
+                    }
+                    else
+                    {
+                        pokemon = (String) object_args[1];
+                    }
+                    String owner = object_args[0].toString();
+                    switchedTo = owner +"/"+pokemon;
                 }
                 BattleStateTracker.addPokemon(switchedTo);
 
@@ -272,7 +295,11 @@ public class BattleProcess {
         }
         else {
             var data = ((TranslatableContents) ((MutableComponent) target[0]).getContents()).getArgs();
-            String pokemon = ((TranslatableContents) ((MutableComponent) data[1]).getContents()).getKey();
+            String pokemon;
+            if(data[1] instanceof MutableComponent)
+                pokemon = ((TranslatableContents) ((MutableComponent) data[1]).getContents()).getKey();
+            else
+                pokemon = data[1].toString();
             return  data[0] + "/" + pokemon;
         }
     }
