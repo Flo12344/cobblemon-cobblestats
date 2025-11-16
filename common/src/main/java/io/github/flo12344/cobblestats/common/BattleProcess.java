@@ -55,13 +55,23 @@ public class BattleProcess {
         var stats = BattleStateTracker.getChangedStats(key);
         var maxX = isCompact?(COMPACT_TILE_WIDTH - COMPACT_PORTRAIT_DIAMETER-COMPACT_PORTRAIT_OFFSET_Y*2) :(TILE_WIDTH-PORTRAIT_DIAMETER-PORTRAIT_OFFSET_Y*2) -1F;
         final float[] x = {original_X};
-        float finalOriginal_X = original_X;
-
+        final float[] finalOriginal_X = {original_X};
+        if(activeBattlePokemon.getBattlePokemon().getStatus() != null)
+        {
+            if(left)
+            {
+                x[0] += 35;
+            }
+            else
+            {
+                finalOriginal_X[0] -= 35;
+            }
+        }
         final float scale = 0.5f;
         final float[] y = {original_Y};
         stats.forEach(s -> {
-            if(x[0] + ((int) (mc.font.width(s) * scale)) > finalOriginal_X + maxX){
-                x[0] = finalOriginal_X;
+            if(x[0] + ((int) (mc.font.width(s) * scale)) > finalOriginal_X[0] + maxX){
+                x[0] = finalOriginal_X[0];
                 y[0] += mc.font.lineHeight * scale +3;
             }
             x[0] = drawStats(context, mc.font, s, (int) x[0], (int) y[0], scale, 0xFFFFFF) + 3;
