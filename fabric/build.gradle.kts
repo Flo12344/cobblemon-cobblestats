@@ -17,7 +17,11 @@ loom {
         defaultRefmapName.set("mixins.${project.name}.refmap.json")
     }
 }
-val shadowCommon = configurations.create("shadowCommon")
+//val shadowCommon = configurations.create("shadowCommon")
+val shadowCommon = configurations.create("shadowBundle") {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
 
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
@@ -26,6 +30,9 @@ dependencies {
 
     modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
     modImplementation(fabricApi.module("fabric-command-api-v2", property("fabric_api_version").toString()))
+    modImplementation(fabricApi.module("fabric-networking-api-v1", property("fabric_api_version").toString()))
+    modImplementation(fabricApi.module("fabric-game-rule-api-v1", property("fabric_api_version").toString()))
+    modImplementation(fabricApi.module("fabric-lifecycle-events-v1", property("fabric_api_version").toString()))
 
     //needed for cobblemon
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin")}")

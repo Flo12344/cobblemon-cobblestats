@@ -29,3 +29,4 @@ replay_pid*
 fabric/run/
 neoforge/run/
 **/.architectury-transformer/
+build.sh

@@ -1,4 +1,4 @@
-package io.github.flo12344.cobblestats.common;
+package io.github.flo12344.cobblestats.common.client;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -7,97 +7,91 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import java.util.*;
 
 public class PokemonBattleState {
-    private final Map<String, Integer> states= new HashMap<>();
+    private final Map<String, Integer> states = new HashMap<>();
     private final Set<String> typesAdded = new HashSet<>();
     private final Set<String> extraEffects = new HashSet<>();
-    private final Map<String, Integer> turnBasedffects= new HashMap<>();
+    private final Map<String, Integer> turnBasedffects = new HashMap<>();
 
     private String typeOverride = "";
 
     public PokemonBattleState() {
     }
 
-    public void boostState(String stat, String severity, boolean isBoost)
-    {
+    public void boostState(String stat, String severity, boolean isBoost) {
         int current = states.getOrDefault(stat, 0);
-        int newStage = Math.max(-6, Math.min(6, current + (isBoost? intSeverity(severity) : -intSeverity(severity)))); // clamp between -6 and +6
+        int newStage = Math.max(-6, Math.min(6, current + (isBoost ? intSeverity(severity) : -intSeverity(severity)))); // clamp between -6 and +6
         states.put(stat, newStage);
         checkForZero();
     }
 
-    public void addType(String type)
-    {
+    public void addType(String type) {
         typesAdded.add(type);
     }
 
-    public void overrideType(String type)
-    {
+    public void overrideType(String type) {
         typesAdded.clear();
         typeOverride = type;
     }
 
-    public void addExtraEffect(String effect)
-    {
+    public void addExtraEffect(String effect) {
         extraEffects.add(effect);
     }
 
-    public void removeExtraEffect(String effect)
-    {
+    public void removeExtraEffect(String effect) {
         extraEffects.remove(effect);
     }
 
-    public void checkForZero()
-    {
-        states.forEach((s, integer) -> {if(integer == 0) states.remove(s);});
+    public void checkForZero() {
+        List<String> keysToRemove = new ArrayList<>();
+        states.forEach((s, integer) -> {
+            if (integer == 0) keysToRemove.add(s);
+        });
+        keysToRemove.forEach(states::remove);
     }
 
-    public void printAll(){
+    public void printAll() {
         states.forEach((s, integer) -> System.out.println("    |" + s + " : " + integer));
     }
 
-     public List<String> getStats()
-     {
-         List<String> result = new ArrayList<>();
-         if(!Objects.equals(typeOverride, ""))
-             result.add(typeOverride);
+    public List<String> getStats() {
+        List<String> result = new ArrayList<>();
+        if (!Objects.equals(typeOverride, ""))
+            result.add(typeOverride);
 
-         if (!typesAdded.isEmpty())
-         {
-             typesAdded.forEach(s -> result.add("+" + s));
-         }
+        if (!typesAdded.isEmpty()) {
+            typesAdded.forEach(s -> result.add("+" + s));
+        }
 
-         if(!extraEffects.isEmpty())
-         {
-             extraEffects.forEach(
-                     s -> {
-                         TranslatableContents translatableContents = new TranslatableContents("cobblemon.move." + s, null,new Object[]{});
-                         Component component = MutableComponent.create(translatableContents);
-                         result.add(component.getString());
-                     }
-             );
-         }
+        if (!extraEffects.isEmpty()) {
+            extraEffects.forEach(
+                    s -> {
+                        TranslatableContents translatableContents = new TranslatableContents("cobblemon.move." + s, null, new Object[]{});
+                        Component component = MutableComponent.create(translatableContents);
+                        result.add(component.getString());
+                    }
+            );
+        }
 
         states.forEach((s, integer) -> {
-            result.add(s + " " + statToString(s,integer));
+            result.add(s + " " + statToString(s, integer));
         });
 
 
         return result;
-     }
+    }
 
-    private Integer intSeverity(String severity){
-        switch (severity){
-            case "slight"->{
+    private Integer intSeverity(String severity) {
+        switch (severity) {
+            case "slight" -> {
                 return 1;
             }
-            case "sharp"->{
+            case "sharp" -> {
                 return 2;
             }
-            case "severe"->
-            {
+            case "severe" -> {
                 return 3;
             }
-            case "max"->{
+            case "max" -> {
                 return 12;
             }
             default -> {
@@ -106,8 +100,7 @@ public class PokemonBattleState {
         }
     }
 
-    private String statToString(String stat, Integer value)
-    {
+    private String statToString(String stat, Integer value) {
         return switch (stat) {
             case "accuracy" -> switch (value) {
                 case -6 -> "0.333x";

@@ -4,9 +4,15 @@
   "package": "io.github.flo12344.cobblestats.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "BattleInitializeHandlerMixin",
-    "BattleGUIMixin",
-    "BattleMessageHandlerMixin"
+    "client.CSBattleInitializeHandlerMixin",
+    "client.CSBattleMessageHandlerMixin",
+    "client.CSBattleOverlayMixin"
+  ],
+  "mixins": [
+    "server.CSBattleEndMixin",
+    "server.CSFaintInstructionMixin",
+    "server.CSHealInstructionMixin",
+    "server.CSInitializeInstructionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

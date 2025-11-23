@@ -1,0 +1,391 @@
+package io.github.flo12344.cobblestats.common.client;
+
+import com.cobblemon.mod.common.api.battles.model.actor.ActorType;
+import com.cobblemon.mod.common.api.gui.GuiUtilsKt;
+import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon;
+import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket;
+import io.github.flo12344.cobblestats.common.client.net.ClientData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.PlainTextContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.Objects;
+
+import static com.cobblemon.mod.common.client.gui.battle.BattleOverlay.*;
+
+public class BattleProcess {
+    private static int sideCount = 0;
+    private static boolean side1 = false;
+    private static boolean side2 = false;
+
+    public static void drawUI(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, int rank, boolean isHovered, boolean isCompact) {
+        var mc = Minecraft.getInstance();
+
+        var battlePokemon = activeBattlePokemon.getBattlePokemon();
+        if (battlePokemon == null) {
+            return;
+        }
+        var battle = CobblemonClient.INSTANCE.getBattle();
+        if (battle == null) {
+            return;
+        }
+
+        int playerNumberOffset = (Character.getNumericValue(activeBattlePokemon.getActorShowdownId().charAt(1)) - 1) / 2 * 10;
+
+        float original_Y = VERTICAL_INSET + rank * (isCompact ? COMPACT_VERTICAL_SPACING : VERTICAL_SPACING) + (left ? playerNumberOffset : (battle.getBattleFormat().getBattleType().getActorsPerSide() - 1) * 10 - playerNumberOffset);
+
+        float original_X = activeBattlePokemon.getXDisplacement();
+
+        var portraitOffsetY = isCompact ? COMPACT_PORTRAIT_OFFSET_Y : PORTRAIT_OFFSET_Y;
+        var portraitDiameter = isCompact ? COMPACT_PORTRAIT_DIAMETER : PORTRAIT_DIAMETER;
+        var infoOffsetX = isCompact ? COMPACT_INFO_OFFSET_X : INFO_OFFSET_X;
+
+
+        original_X += left ? infoOffsetX + portraitDiameter : 0;
+        original_Y += portraitOffsetY + portraitDiameter * .75F;
+
+//        var hue = activeBattlePokemon.getHue();
+//        float r = ((hue >> 16) & 0b11111111) / 255F;
+//        float g = ((hue >> 8) & 0b11111111) / 255F;
+//        float b = (hue & 0b11111111) / 255F;
+
+
+        int c = battle.getSide1().getActors().size() + battle.getSide2().getActors().size();
+        if (sideCount >= c) {
+            sideCount = 0;
+            side1 = false;
+            side2 = false;
+        }
+
+        String key;
+        var value = activeBattlePokemon.getBattlePokemon().getDisplayName().getContents();
+        if (value instanceof TranslatableContents) {
+            key = ((TranslatableContents) value).getKey();
+        } else {
+            key = ((PlainTextContents.LiteralContents) value).text();
+        }
+
+        if (activeBattlePokemon.getBattlePokemon().getActor().getDisplayName().getContents() instanceof PlainTextContents.LiteralContents(
+                String text1
+        )) {
+            key = text1 + "/" + key;
+        } else if (activeBattlePokemon.getBattlePokemon().getActor().getDisplayName().getContents() instanceof TranslatableContents translatableContents) {
+            if (!translatableContents.getKey().contains("."))
+                key = translatableContents.getKey() + "/" + key;
+        }
+
+        original_X += 5;
+        var stats = BattleStateTracker.getChangedStats(key);
+        var maxX = isCompact ? (COMPACT_TILE_WIDTH - COMPACT_PORTRAIT_DIAMETER - COMPACT_PORTRAIT_OFFSET_Y * 2) : (TILE_WIDTH - PORTRAIT_DIAMETER - PORTRAIT_OFFSET_Y * 2) - 1F;
+        final float[] x = {original_X};
+        final float[] finalOriginal_X = {original_X};
+        if (activeBattlePokemon.getBattlePokemon().getStatus() != null) {
+            if (left) {
+                x[0] += 35;
+            } else {
+                finalOriginal_X[0] -= 35;
+            }
+        }
+        final float scale = 0.5f;
+        final float[] y = {original_Y};
+        stats.forEach(s -> {
+            if (x[0] + ((int) (mc.font.width(s) * scale)) > finalOriginal_X[0] + maxX) {
+                x[0] = finalOriginal_X[0];
+                y[0] += mc.font.lineHeight * scale + 3;
+            }
+            x[0] = drawStats(context, mc.font, s, (int) x[0], (int) y[0], scale, 0xFFFFFF) + 3;
+        });
+
+
+        if (left) {
+            final int[] y_pos = {VERTICAL_INSET};
+            if (!((String) TerrainBattleState.getTerrainState()[0]).isEmpty()) {
+                var terrain = TerrainBattleState.getTerrainState();
+                String text = ((String) terrain[0]);
+                if (((Integer) terrain[1]) < 0) {
+                    text += " " + (((Integer) terrain[1]) + 3);
+                } else {
+                    text += " " + terrain[1] + " or " + (((Integer) terrain[1]) + 3);
+
+                }
+                int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
+
+                drawStats(context, mc.font, text, (int) x_pos, y_pos[0], scale, 0xFFFFFF);
+                y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
+            }
+
+            TerrainBattleState.getRoomState().forEach((s, integer) -> {
+                String text = s + " " + integer;
+                int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
+                drawStats(context, mc.font, text, (int) x_pos, y_pos[0], scale, 0xFFFFFF);
+                y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
+            });
+
+            if (!((String) TerrainBattleState.getWeatherState()[0]).isEmpty()) {
+                var weather = TerrainBattleState.getWeatherState();
+                String text = ((String) weather[0]);
+                if (((Integer) weather[1]) < 0) {
+                    text += " " + (((Integer) weather[1]) + 3);
+                } else {
+                    text += " " + weather[1] + " or " + (((Integer) weather[1]) + 3);
+
+                }
+                int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
+                drawStats(context, mc.font, text, (int) x_pos, y_pos[0], scale, 0xFFFFFF);
+                y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
+            }
+        }
+        sideCount++;
+        if ((left && side1) || (!left && side2)) return;
+        if (left)
+            side1 = true;
+        else
+            side2 = true;
+
+        renderHazard(context, left, isCompact, original_Y, mc, scale);
+        if (!ClientData.SERVER_COMPAT) return;
+        if (!left && activeBattlePokemon.getActor().getType() == ActorType.WILD) return;
+
+        x[0] = finalOriginal_X[0];
+        final int _y_pos = 4;
+        var matrix = context.pose();
+        matrix.pushPose();
+        matrix.translate(x[0], 4, 0);
+        float ball_size = 0.45f;
+        matrix.scale(ball_size, ball_size, ball_size);
+        ClientData.pokemonCounts.forEach((uuid, integer) -> {
+            String pokeball = "poke_ball";
+            if (activeBattlePokemon.getActor().getUuid().equals(uuid)) {
+                int pos = left ? (int) (isCompact ? COMPACT_TILE_WIDTH - ball_size * ((18 + 1) * 6) : TILE_WIDTH - ball_size * ((18 + 1) * 6)) : 0;
+                var team = integer.getTeamPokemons();
+                Number color_shift;
+                for (int i = 0; i < 6; i++) {
+                    int margin = 1;
+                    if (i < team.size() && team.get(i) != null) {
+                        pokeball = team.get(i).ball;
+                        if (!team.get(i).is_ko)
+                            color_shift = 1;
+                        else {
+                            color_shift = 0.5;
+                        }
+                    } else {
+                        color_shift = 0;
+                    }
+                    ResourceLocation res = ResourceLocation.fromNamespaceAndPath("cobblemon", "textures/gui/ball/" + pokeball + ".png");
+
+                    GuiUtilsKt.blitk(matrix, res,
+                            pos, 0, 20, 18, 0, 0, 18, 44, 1, color_shift, color_shift, color_shift, 1);
+                    pos += 18 + margin;
+                }
+            }
+        });
+        matrix.popPose();
+    }
+
+    private static void renderHazard(GuiGraphics context, boolean left, boolean isCompact, float original_Y, Minecraft mc, float scale) {
+        final int[] _y = {(int) (original_Y + (isCompact ? COMPACT_PORTRAIT_DIAMETER : PORTRAIT_DIAMETER))};
+        TerrainBattleState.getHazardStates(left).forEach((s, integer) -> {
+            String text = s;
+            if (integer > 1)
+                text += " " + integer;
+            int _x = VERTICAL_INSET;
+            if (!left) {
+                _x = mc.getWindow().getGuiScaledWidth() - _x - ((int) (mc.font.width(text) * scale));
+            }
+            drawStats(context, mc.font, text, _x, _y[0], scale, 0xFFFFFF);
+            _y[0] += (int) (mc.font.lineHeight * scale) + 3;
+        });
+    }
+
+    public static Object[] processBattleData(TranslatableContents messagePacket, String current_atk, String current_pkm, PokemonBattleState tmp_stat_holder) {
+        String[] MainActionSplit = messagePacket.getKey().split("\\.");
+        if (MainActionSplit.length < 3 || !Objects.equals(MainActionSplit[1], "battle"))
+            return new Object[]{current_atk, current_pkm, tmp_stat_holder};
+
+//        System.out.println(messagePacket.getMessages().getFirst().getContents().toString());
+        Object[] object_args = messagePacket.getArgs();
+//        System.out.println("VAL = " + Arrays.toString(MainActionSplit));
+//        System.out.println("VAL2 = " + object_args[0].toString());
+//        System.out.println("VAL2 = " + object_args[1].toString());
+        switch (MainActionSplit[2]) {
+            case "unboost":
+            case "boost":
+                if (MainActionSplit.length > 3 && Objects.equals(MainActionSplit[3], "cap"))
+                    return new Object[]{current_atk, current_pkm, tmp_stat_holder};
+
+                BattleStateTracker.changeStats(
+                        getPkm(object_args),
+                        ((TranslatableContents) ((MutableComponent) object_args[1]).getContents()).getKey().split("\\.")[2],
+                        MainActionSplit[3],
+                        Objects.equals(MainActionSplit[2], "boost"));
+                break;
+
+            case "used_move_on":
+            case "used_move":
+                current_pkm = getPkm(object_args);
+                current_atk = ((TranslatableContents) ((MutableComponent) object_args[1]).getContents()).getKey().split("\\.")[2];
+                break;
+
+            case "switch":
+                String switchedTo;
+                if (MainActionSplit[3].equals("self")) {
+                    String pokemon;
+                    if (object_args[0] instanceof MutableComponent) {
+                        pokemon = ((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey();
+                    } else {
+                        pokemon = (String) object_args[0];
+                    }
+                    String owner = Minecraft.getInstance().player.getDisplayName().getString();
+                    switchedTo = owner + "/" + pokemon;
+                } else {
+                    String pokemon;
+                    if (object_args[1] instanceof MutableComponent) {
+                        pokemon = ((TranslatableContents) ((MutableComponent) object_args[1]).getContents()).getKey();
+                    } else {
+                        pokemon = (String) object_args[1];
+                    }
+                    String owner;
+                    if (object_args[0] instanceof MutableComponent) {
+                        owner = ((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey();
+                    } else {
+                        owner = object_args[0].toString();
+                    }
+                    switchedTo = owner + "/" + pokemon;
+                }
+                BattleStateTracker.addPokemon(switchedTo);
+
+                if (Objects.equals(current_atk, "batonpass") && tmp_stat_holder != null) {
+                    BattleStateTracker.applyStats(switchedTo, tmp_stat_holder);
+                    tmp_stat_holder = null;
+                    current_atk = "";
+                }
+                break;
+            case "start":
+                switch (MainActionSplit[3]) {
+                    case "typechange":
+                        BattleStateTracker.getPokemon(getPkm(object_args)).overrideType(object_args[1].toString());
+                        break;
+                    case "typeadd":
+                        BattleStateTracker.getPokemon(getPkm(object_args)).addType(object_args[1].toString());
+                        break;
+                    default:
+                        BattleStateTracker.getPokemon(getPkm(object_args)).addExtraEffect(MainActionSplit[3]);
+                        break;
+                }
+                break;
+            case "end":
+                BattleStateTracker.getPokemon(getPkm(object_args)).removeExtraEffect(MainActionSplit[3]);
+                break;
+
+            case "fail":
+                current_atk = "";
+                break;
+
+            case "setboost":
+                BattleStateTracker.changeStats(getPkm(object_args), "attack", "max", true);
+                break;
+            case "fieldstart":
+                if (MainActionSplit[3].contains("terrain"))
+                    TerrainBattleState.setTerrain(MainActionSplit[3]);
+                else
+                    TerrainBattleState.addRoom(MainActionSplit[3]);
+                break;
+            case "fieldend":
+                if (MainActionSplit[3].contains("terrain"))
+                    TerrainBattleState.setTerrain("");
+                else
+                    TerrainBattleState.removeRoom(MainActionSplit[3]);
+                break;
+            case "sidestart":
+                if (((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally")) {
+                    TerrainBattleState.addHazard(true, MainActionSplit[3]);
+                } else {
+                    TerrainBattleState.addHazard(false, MainActionSplit[3]);
+                }
+                break;
+            case "sideend":
+                if (((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally")) {
+                    TerrainBattleState.removeHazard(true, MainActionSplit[3]);
+                } else {
+                    TerrainBattleState.removeHazard(false, MainActionSplit[3]);
+                }
+                break;
+            case "weather":
+                if (Objects.equals(MainActionSplit[4], "start")) {
+                    TerrainBattleState.setWeather(MainActionSplit[3]);
+                } else if (Objects.equals(MainActionSplit[4], "end")) {
+                    TerrainBattleState.setWeather("");
+                }
+                break;
+            case "turn":
+                TerrainBattleState.updateRoom();
+                TerrainBattleState.updateTerrain();
+                TerrainBattleState.updateWeather();
+                break;
+
+            default:
+                break;
+        }
+        if (Objects.equals(current_atk, "batonpass") && tmp_stat_holder == null) {
+            tmp_stat_holder = BattleStateTracker.getStatsForHold(current_pkm);
+        }
+
+        return new Object[]{current_atk, current_pkm, tmp_stat_holder};
+    }
+
+    private static String getPkm(Object[] target) {
+        if (((TranslatableContents) ((MutableComponent) target[0]).getContents()).getKey().contains("species")) {
+            return ((TranslatableContents) ((MutableComponent) target[0]).getContents()).getKey();
+        } else {
+            var data = ((TranslatableContents) ((MutableComponent) target[0]).getContents()).getArgs();
+            String pokemon;
+            if (data[1] instanceof MutableComponent)
+                pokemon = ((TranslatableContents) ((MutableComponent) data[1]).getContents()).getKey();
+            else
+                pokemon = data[1].toString();
+            String owner;
+            if (data[0] instanceof MutableComponent)
+                owner = ((TranslatableContents) ((MutableComponent) data[0]).getContents()).getKey();
+            else
+                owner = data[0].toString();
+            return owner + "/" + pokemon;
+        }
+    }
+
+    private static final int BG = 0x888D8D8D;
+    private static final int BORDER = 0xFF2F2F2F;
+
+    private static int drawStats(GuiGraphics ctx, Font font, String text, int x, int y, float scale, int color) {
+        int margin = 1;
+        ctx.fill(x - margin, y - margin, x + (int) (font.width(text) * scale) + margin, y + (int) (font.lineHeight * scale) + margin, BG);
+        ctx.renderOutline(x - margin * 2, y - margin * 2, (int) (font.width(text) * scale) + margin * 4, (int) (font.lineHeight * scale) + margin * 4, BORDER);
+
+        ctx.pose().pushPose();
+        ctx.pose().translate(x, y, 0);
+        ctx.pose().scale(scale, scale, 0);
+        ctx.drawString(font, text, 0, 0, color, true);
+        ctx.pose().popPose();
+        return x + (int) (font.width(text) * scale) + margin;
+    }
+
+    public static void checkSide(BattleInitializePacket.BattleSideDTO side) {
+        if (!side.component1().getFirst().getActivePokemon().isEmpty()) {
+            side.component1().getFirst().getActivePokemon().forEach(activeBattlePokemonDTO ->
+            {
+                if (activeBattlePokemonDTO == null) return;
+                if (side.component1().getFirst().getType() == ActorType.PLAYER) {
+                    BattleStateTracker.addPokemon(side.component1().getFirst().getDisplayName().getString() + "/" + ((TranslatableContents) activeBattlePokemonDTO.getDisplayName().getContents()).getKey());
+                } else if (side.component1().getFirst().getType() == ActorType.NPC) {
+                    BattleStateTracker.addPokemon(side.component1().getFirst().getDisplayName() + "/" + ((TranslatableContents) activeBattlePokemonDTO.getDisplayName().getContents()).getKey());
+                } else {
+                    BattleStateTracker.addPokemon(((TranslatableContents) activeBattlePokemonDTO.getDisplayName().getContents()).getKey());
+                }
+            });
+        }
+    }
+}

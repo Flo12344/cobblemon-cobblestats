@@ -7,12 +7,15 @@
   "authors": [
     "Flo_12344"
   ],
-  "license": "MIT License",
+  "license": "GPL3 License",
   "icon": "assets/cobblestats/logo.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
+    "main": [
       "io.github.flo12344.cobblestats.CobbleStats"
+    ],
+    "client": [
+      "io.github.flo12344.cobblestats.CobbleStatsClient"
     ]
   },
   "mixins": [
