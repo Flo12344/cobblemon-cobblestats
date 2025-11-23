@@ -65,6 +65,9 @@ public class BattleStateTracker {
     }
 
     public static void endOfBattle() {
+        BattleProcess.sideCount = 0;
+        BattleProcess.side2 = false;
+        BattleProcess.side1 = false;
         battleStateMap.clear();
     }
 }

@@ -1,5 +1,6 @@
 package io.github.flo12344.cobblestats.mixin.client;
 
+import com.cobblemon.mod.common.api.net.NetworkPacket;
 import com.cobblemon.mod.common.client.net.battle.BattleInitializeHandler;
 import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket;
 import io.github.flo12344.cobblestats.common.client.BattleProcess;
@@ -14,11 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BattleInitializeHandler.class)
 public class CSBattleInitializeHandlerMixin {
     @Inject(method = "handle*", at = @At("TAIL"), remap = false)
-    void handle(BattleInitializePacket packet, Minecraft client, CallbackInfo ci) {
-        TerrainBattleState.endOfBattle();
-        BattleStateTracker.endOfBattle();
+    void handle(NetworkPacket packet, Minecraft client, CallbackInfo ci) {
+        if (packet instanceof BattleInitializePacket _packet) {
+            TerrainBattleState.endOfBattle();
+            BattleStateTracker.endOfBattle();
 
-        BattleProcess.checkSide(packet.side1);
-        BattleProcess.checkSide(packet.side2);
+            BattleProcess.checkSide(_packet.side1);
+            BattleProcess.checkSide(_packet.side2);
+        }
     }
 }

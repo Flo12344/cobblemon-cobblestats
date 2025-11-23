@@ -1,5 +1,6 @@
 package io.github.flo12344.cobblestats.mixin.client;
 
+import com.cobblemon.mod.common.api.net.NetworkPacket;
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket;
 import io.github.flo12344.cobblestats.common.client.BattleProcess;
 import io.github.flo12344.cobblestats.common.client.PokemonBattleState;
@@ -17,14 +18,17 @@ public class CSBattleMessageHandlerMixin {
     private PokemonBattleState tmp_stat_holder = null;
 
     @Inject(method = "handle*", at = @At("TAIL"))
-    private void handle(BattleMessagePacket packet, Minecraft client, CallbackInfo ci) {
-        packet.getMessages().forEach(component -> {
+    private void handle(NetworkPacket packet, Minecraft client, CallbackInfo ci) {
+        if (packet instanceof BattleMessagePacket _packet) {
 
-            var ret = BattleProcess.processBattleData(((TranslatableContents) component.getContents()), current_atk, current_pkm, tmp_stat_holder);
+            _packet.getMessages().forEach(component -> {
 
-            current_atk = ((String) ret[0]);
-            current_pkm = ((String) ret[1]);
-            tmp_stat_holder = ((PokemonBattleState) ret[2]);
-        });
+                var ret = BattleProcess.processBattleData(((TranslatableContents) component.getContents()), current_atk, current_pkm, tmp_stat_holder);
+
+                current_atk = ((String) ret[0]);
+                current_pkm = ((String) ret[1]);
+                tmp_stat_holder = ((PokemonBattleState) ret[2]);
+            });
+        }
     }
 }

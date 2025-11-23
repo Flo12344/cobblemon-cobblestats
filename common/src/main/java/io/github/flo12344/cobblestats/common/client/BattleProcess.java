@@ -19,9 +19,9 @@ import java.util.Objects;
 import static com.cobblemon.mod.common.client.gui.battle.BattleOverlay.*;
 
 public class BattleProcess {
-    private static int sideCount = 0;
-    private static boolean side1 = false;
-    private static boolean side2 = false;
+    public static int sideCount = 0;
+    public static boolean side1 = false;
+    public static boolean side2 = false;
 
     public static void drawUI(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, int rank, boolean isHovered, boolean isCompact) {
         var mc = Minecraft.getInstance();
@@ -207,11 +207,7 @@ public class BattleProcess {
         if (MainActionSplit.length < 3 || !Objects.equals(MainActionSplit[1], "battle"))
             return new Object[]{current_atk, current_pkm, tmp_stat_holder};
 
-//        System.out.println(messagePacket.getMessages().getFirst().getContents().toString());
         Object[] object_args = messagePacket.getArgs();
-//        System.out.println("VAL = " + Arrays.toString(MainActionSplit));
-//        System.out.println("VAL2 = " + object_args[0].toString());
-//        System.out.println("VAL2 = " + object_args[1].toString());
         switch (MainActionSplit[2]) {
             case "unboost":
             case "boost":
