@@ -101,6 +101,8 @@ public class TerrainBattleState {
     public static void endOfBattle() {
         rooms.clear();
         weather = "";
+        terrain = "";
+        terrainTurns = 0;
         hazardStateSide1.clear();
         hazardStateSide2.clear();
     }

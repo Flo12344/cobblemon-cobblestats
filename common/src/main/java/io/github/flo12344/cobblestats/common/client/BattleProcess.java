@@ -327,6 +327,7 @@ public class BattleProcess {
                 TerrainBattleState.updateTerrain();
                 TerrainBattleState.updateWeather();
                 break;
+            case "":
 
             default:
                 break;
