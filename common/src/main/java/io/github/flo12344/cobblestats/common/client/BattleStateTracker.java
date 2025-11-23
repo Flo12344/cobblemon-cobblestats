@@ -53,6 +53,10 @@ public class BattleStateTracker {
         );
     }
 
+    public static int getPokemonCount() {
+        return battleStateMap.size();
+    }
+
     private static String getSmallName(String stat) {
         return switch (stat) {
             case "attack" -> "Atk";

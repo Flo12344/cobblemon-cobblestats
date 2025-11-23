@@ -80,6 +80,7 @@ public class PokemonBattleState {
         return result;
     }
 
+
     private Integer intSeverity(String severity) {
         switch (severity) {
             case "slight" -> {

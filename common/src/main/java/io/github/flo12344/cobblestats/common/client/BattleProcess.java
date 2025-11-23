@@ -19,6 +19,8 @@ import java.util.Objects;
 import static com.cobblemon.mod.common.client.gui.battle.BattleOverlay.*;
 
 public class BattleProcess {
+    public static int previousCount = 0;
+    public static int currentCount = 0;
     public static int sideCount = 0;
     public static boolean side1 = false;
     public static boolean side2 = false;
@@ -54,13 +56,6 @@ public class BattleProcess {
 //        float g = ((hue >> 8) & 0b11111111) / 255F;
 //        float b = (hue & 0b11111111) / 255F;
 
-
-        int c = battle.getSide1().getActors().size() + battle.getSide2().getActors().size();
-        if (sideCount >= c) {
-            sideCount = 0;
-            side1 = false;
-            side2 = false;
-        }
 
         String key;
         var value = activeBattlePokemon.getBattlePokemon().getDisplayName().getContents();
@@ -140,18 +135,15 @@ public class BattleProcess {
                 y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
             }
         }
-        sideCount++;
-        if ((left && side1) || (!left && side2)) return;
-        if (left)
-            side1 = true;
-        else
-            side2 = true;
 
         renderHazard(context, left, isCompact, original_Y, mc, scale);
         if (!ClientData.SERVER_COMPAT) return;
         if (!left && activeBattlePokemon.getActor().getType() == ActorType.WILD) return;
-
-        x[0] = finalOriginal_X[0];
+        var pokeballX = HORIZONTAL_INSET;
+        if (!left) {
+            pokeballX = mc.getWindow().getGuiScaledWidth() - pokeballX - (isCompact ? COMPACT_TILE_WIDTH : TILE_WIDTH);
+        }
+        x[0] = pokeballX + battle.getBattleFormat().getBattleType().getSlotsPerActor() + (left ? infoOffsetX + portraitDiameter : 0);
         final int _y_pos = 4;
         var matrix = context.pose();
         matrix.pushPose();
@@ -179,7 +171,7 @@ public class BattleProcess {
                     ResourceLocation res = ResourceLocation.fromNamespaceAndPath("cobblemon", "textures/gui/ball/" + pokeball + ".png");
 
                     GuiUtilsKt.blitk(matrix, res,
-                            pos, 0, 20, 18, 0, 0, 18, 44, 1, color_shift, color_shift, color_shift, 1);
+                            pos, 0, 20, 18, 0, 0, 18, 44, 5, color_shift, color_shift, color_shift, 1);
                     pos += 18 + margin;
                 }
             }
@@ -261,6 +253,35 @@ public class BattleProcess {
                     current_atk = "";
                 }
                 break;
+            case "withdraw":
+                String toRemove;
+                if (MainActionSplit[3].equals("self")) {
+                    String pokemon;
+                    if (object_args[0] instanceof MutableComponent) {
+                        pokemon = ((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey();
+                    } else {
+                        pokemon = (String) object_args[0];
+                    }
+                    String owner = Minecraft.getInstance().player.getDisplayName().getString();
+                    toRemove = owner + "/" + pokemon;
+                } else {
+                    String pokemon;
+                    if (object_args[1] instanceof MutableComponent) {
+                        pokemon = ((TranslatableContents) ((MutableComponent) object_args[1]).getContents()).getKey();
+                    } else {
+                        pokemon = (String) object_args[1];
+                    }
+                    String owner;
+                    if (object_args[0] instanceof MutableComponent) {
+                        owner = ((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey();
+                    } else {
+                        owner = object_args[0].toString();
+                    }
+                    toRemove = owner + "/" + pokemon;
+                }
+                BattleStateTracker.removePokemon(toRemove);
+                break;
+
             case "start":
                 switch (MainActionSplit[3]) {
                     case "typechange":
@@ -323,9 +344,12 @@ public class BattleProcess {
                 TerrainBattleState.updateTerrain();
                 TerrainBattleState.updateWeather();
                 break;
-            case "":
+            case "fainted":
+                BattleStateTracker.removePokemon(getPkm(object_args));
+                break;
 
             default:
+                System.out.println(messagePacket.toString());
                 break;
         }
         if (Objects.equals(current_atk, "batonpass") && tmp_stat_holder == null) {
