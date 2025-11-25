@@ -70,7 +70,7 @@ public class BattleProcess {
         )) {
             key = text1 + "/" + key;
         } else if (activeBattlePokemon.getBattlePokemon().getActor().getDisplayName().getContents() instanceof TranslatableContents translatableContents) {
-            if (!translatableContents.getKey().contains("."))
+            if (!translatableContents.getKey().contains(".") || translatableContents.getKey().contains("trainer"))
                 key = translatableContents.getKey() + "/" + key;
         }
 
@@ -198,6 +198,7 @@ public class BattleProcess {
         String[] MainActionSplit = messagePacket.getKey().split("\\.");
         if (MainActionSplit.length < 3 || !Objects.equals(MainActionSplit[1], "battle"))
             return new Object[]{current_atk, current_pkm, tmp_stat_holder};
+        System.out.println(messagePacket.toString());
 
         Object[] object_args = messagePacket.getArgs();
         switch (MainActionSplit[2]) {
@@ -349,7 +350,7 @@ public class BattleProcess {
                 break;
 
             default:
-                System.out.println(messagePacket.toString());
+//                System.out.println(messagePacket.toString());
                 break;
         }
         if (Objects.equals(current_atk, "batonpass") && tmp_stat_holder == null) {
