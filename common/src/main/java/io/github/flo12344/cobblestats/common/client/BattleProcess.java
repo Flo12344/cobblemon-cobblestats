@@ -320,17 +320,33 @@ public class BattleProcess {
                     TerrainBattleState.removeRoom(MainActionSplit[3]);
                 break;
             case "sidestart":
-                if (((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally")) {
-                    TerrainBattleState.addHazard(true, MainActionSplit[3]);
+                if (MainActionSplit.length == 5) {
+                    if (MainActionSplit[3].equals("opponent")) {
+                        TerrainBattleState.addHazard(false, MainActionSplit[4]);
+                    } else {
+                        TerrainBattleState.addHazard(true, MainActionSplit[4]);
+                    }
                 } else {
-                    TerrainBattleState.addHazard(false, MainActionSplit[3]);
+                    if (((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally")) {
+                        TerrainBattleState.addHazard(true, MainActionSplit[3]);
+                    } else {
+                        TerrainBattleState.addHazard(false, MainActionSplit[3]);
+                    }
                 }
                 break;
             case "sideend":
-                if (((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally")) {
-                    TerrainBattleState.removeHazard(true, MainActionSplit[3]);
+                if (MainActionSplit.length == 5) {
+                    if (MainActionSplit[3].equals("opponent")) {
+                        TerrainBattleState.removeHazard(false, MainActionSplit[4]);
+                    } else {
+                        TerrainBattleState.removeHazard(true, MainActionSplit[4]);
+                    }
                 } else {
-                    TerrainBattleState.removeHazard(false, MainActionSplit[3]);
+                    if (((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally")) {
+                        TerrainBattleState.removeHazard(true, MainActionSplit[3]);
+                    } else {
+                        TerrainBattleState.removeHazard(false, MainActionSplit[3]);
+                    }
                 }
                 break;
             case "weather":
