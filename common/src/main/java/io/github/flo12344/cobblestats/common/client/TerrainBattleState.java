@@ -6,6 +6,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class TerrainBattleState {
     private static String weather = "";
@@ -64,10 +65,17 @@ public class TerrainBattleState {
     public static void setWeather(String state) {
         weather = state;
         weatherTurns = 5;
+        if (Objects.equals(weather, "desolateland") || Objects.equals(weather, "primordialsea")) {
+            weatherTurns = -10;
+        }
     }
 
     public static Object[] getWeatherState() {
-        TranslatableContents translatableContents = new TranslatableContents("cobblemon.battle.weather." + weather + ".upkeep", null, new Object[]{});
+        TranslatableContents translatableContents;
+        if (Objects.equals(weather, "desolateland") || Objects.equals(weather, "primordialsea")) {
+            translatableContents = new TranslatableContents("cobblemon.ability." + weather, null, new Object[]{});
+        } else
+            translatableContents = new TranslatableContents("cobblemon.battle.weather." + weather + ".upkeep", null, new Object[]{});
         Component component = MutableComponent.create(translatableContents);
         return new Object[]{weather.isEmpty() ? "" : component.getString(), weatherTurns};
     }
