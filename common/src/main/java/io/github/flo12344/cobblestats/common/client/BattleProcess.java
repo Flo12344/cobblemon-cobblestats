@@ -124,11 +124,12 @@ public class BattleProcess {
             if (!((String) TerrainBattleState.getWeatherState()[0]).isEmpty()) {
                 var weather = TerrainBattleState.getWeatherState();
                 String text = ((String) weather[0]);
-                if (((Integer) weather[1]) < 0) {
-                    text += " " + (((Integer) weather[1]) + 3);
-                } else {
-                    text += " " + weather[1] + " or " + (((Integer) weather[1]) + 3);
-
+                if (((Integer) weather[1]) >= -9) {
+                    if (((Integer) weather[1]) < 0) {
+                        text += " " + (((Integer) weather[1]) + 3);
+                    } else {
+                        text += " " + weather[1] + " or " + (((Integer) weather[1]) + 3);
+                    }
                 }
                 int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
                 drawStats(context, mc.font, text, (int) x_pos, y_pos[0], scale, 0xFFFFFF);
