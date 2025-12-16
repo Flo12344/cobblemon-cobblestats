@@ -197,7 +197,16 @@ public class BattleProcess {
 
     public static Object[] processBattleData(TranslatableContents messagePacket, String current_atk, String current_pkm, PokemonBattleState tmp_stat_holder) {
         String[] MainActionSplit = messagePacket.getKey().split("\\.");
-        if (MainActionSplit.length < 3 || !Objects.equals(MainActionSplit[1], "battle"))
+
+        if (MainActionSplit.length < 3)
+            return new Object[]{current_atk, current_pkm, tmp_stat_holder};
+        if (Objects.equals(MainActionSplit[1], "status")) {
+            if (Objects.equals(MainActionSplit[2], "sleep") && Objects.equals(MainActionSplit[3], "cure")) {
+                BattleStateTracker.getPokemon(current_pkm).removeExtraEffect("yawn");
+            }
+        }
+
+        if (!Objects.equals(MainActionSplit[1], "battle"))
             return new Object[]{current_atk, current_pkm, tmp_stat_holder};
         System.out.println(messagePacket.toString());
 
