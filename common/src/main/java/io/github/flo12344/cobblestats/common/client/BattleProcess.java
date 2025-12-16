@@ -19,11 +19,6 @@ import java.util.Objects;
 import static com.cobblemon.mod.common.client.gui.battle.BattleOverlay.*;
 
 public class BattleProcess {
-    public static int previousCount = 0;
-    public static int currentCount = 0;
-    public static int sideCount = 0;
-    public static boolean side1 = false;
-    public static boolean side2 = false;
 
     public static void drawUI(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, int rank, boolean isHovered, boolean isCompact) {
         var mc = Minecraft.getInstance();
