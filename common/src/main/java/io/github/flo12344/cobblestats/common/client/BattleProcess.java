@@ -364,6 +364,11 @@ public class BattleProcess {
             case "fainted":
                 BattleStateTracker.removePokemon(getPkm(object_args));
                 break;
+            case "ability":
+                if (Objects.equals(MainActionSplit[3], "airlock")) {
+                    TerrainBattleState.setWeather("");
+                }
+                break;
 
             default:
 //                System.out.println(messagePacket.toString());
