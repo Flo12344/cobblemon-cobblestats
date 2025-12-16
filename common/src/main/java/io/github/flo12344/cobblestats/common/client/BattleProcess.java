@@ -51,6 +51,21 @@ public class BattleProcess {
 //        float g = ((hue >> 8) & 0b11111111) / 255F;
 //        float b = (hue & 0b11111111) / 255F;
 
+        {
+            var x = (left ? (float) portraitDiameter / 2 : mc.getWindow().getGuiScaledWidth() - (float) portraitDiameter / 2);
+            var matrix = context.pose();
+            matrix.pushPose();
+            matrix.translate(x, original_Y, 1000);
+            float ball_size = 0.45f;
+            matrix.scale(ball_size, ball_size, ball_size);
+            TypeIcon icon = new TypeIcon(0, 0,
+                    battlePokemon.getSpecies().getPrimaryType(),
+                    battlePokemon.getSpecies().getSecondaryType(),
+                    true, false,
+                    18, 4, 1.0f);
+            icon.render(context);
+            matrix.popPose();
+        }
 
         String key;
         var value = activeBattlePokemon.getBattlePokemon().getDisplayName().getContents();
