@@ -60,7 +60,11 @@ public class PokemonBattleState {
     }
 
     public void removeExtraEffect(String effect) {
-        extraEffects.remove(effect);
+        if (turnBasedExtraEffects.containsKey(effect)) {
+            turnBasedExtraEffects.remove(effect);
+        } else {
+            extraEffects.remove(effect);
+        }
     }
 
     public void checkForZero() {
