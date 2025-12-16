@@ -208,7 +208,6 @@ public class BattleProcess {
 
         if (!Objects.equals(MainActionSplit[1], "battle"))
             return new Object[]{current_atk, current_pkm, tmp_stat_holder};
-        System.out.println(messagePacket.toString());
 
         Object[] object_args = messagePacket.getArgs();
         switch (MainActionSplit[2]) {
