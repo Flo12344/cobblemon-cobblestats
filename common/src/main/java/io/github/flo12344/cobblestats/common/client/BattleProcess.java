@@ -98,7 +98,7 @@ public class BattleProcess {
 
 
         if (left) {
-            final int[] y_pos = {VERTICAL_INSET};
+            final int[] y_pos = {VERTICAL_INSET + 30};
             if (!((String) TerrainBattleState.getTerrainState()[0]).isEmpty()) {
                 var terrain = TerrainBattleState.getTerrainState();
                 String text = ((String) terrain[0]);
