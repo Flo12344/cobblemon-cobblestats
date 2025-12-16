@@ -17,6 +17,12 @@ public class BattleStateTracker {
         battleStateMap.get(name).boostState(getSmallName(stat), severity, isBoost);
     }
 
+    public static void clearAllBoosts(String name, boolean negativeOnly) {
+        if (!battleStateMap.containsKey(name))
+            return;
+        battleStateMap.get(name).clearAllBoosts(negativeOnly);
+    }
+
     public static void addPokemon(String name) {
         battleStateMap.put(name, new PokemonBattleState());
     }

@@ -213,6 +213,12 @@ public class BattleProcess {
                         MainActionSplit[3],
                         Objects.equals(MainActionSplit[2], "boost"));
                 break;
+            case "clearallboost":
+                BattleStateTracker.clearAllBoosts(current_pkm, false);
+                break;
+            case "clearallnegativeboost":
+                BattleStateTracker.clearAllBoosts(current_pkm, true);
+                break;
 
             case "used_move_on":
             case "used_move":

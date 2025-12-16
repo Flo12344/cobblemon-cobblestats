@@ -24,6 +24,20 @@ public class PokemonBattleState {
         checkForZero();
     }
 
+    public void clearAllBoosts(boolean negativeOnly) {
+        if (negativeOnly) {
+            List<String> keysToRemove = new ArrayList<>();
+            states.forEach((s, integer) -> {
+                if (integer < 0)
+                    keysToRemove.add(s);
+            });
+            keysToRemove.forEach(states::remove);
+        } else {
+            states.clear();
+        }
+    }
+
+
     public void addType(String type) {
         typesAdded.add(type);
     }
