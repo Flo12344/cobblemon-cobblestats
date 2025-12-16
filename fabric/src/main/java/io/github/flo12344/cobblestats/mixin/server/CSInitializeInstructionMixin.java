@@ -48,8 +48,8 @@ public class CSInitializeInstructionMixin {
                             team.add(
                                     new PokemonStateInit(
                                             ServerData.startTeams.get(uuid1).indexOf(mon),
-                                            _mon.getSpecies().toString(),
-                                            _mon.getForm().toString(),
+                                            "",// _mon.getSpecies().toString(),
+                                            "", //_mon.getForm().toString(),
                                             ball_to_send,
                                             mon.getHealth() <= 0));
                         }
