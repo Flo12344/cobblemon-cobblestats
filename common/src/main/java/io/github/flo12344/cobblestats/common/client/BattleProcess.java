@@ -137,7 +137,7 @@ public class BattleProcess {
             }
         }
 
-        renderHazard(context, left, isCompact, original_Y, mc, scale);
+        renderHazard(context, left, isCompact, mc, scale);
         if (!ClientData.SERVER_COMPAT) return;
         if (!left && activeBattlePokemon.getActor().getType() == ActorType.WILD) return;
         var pokeballX = HORIZONTAL_INSET;
@@ -180,8 +180,8 @@ public class BattleProcess {
         matrix.popPose();
     }
 
-    private static void renderHazard(GuiGraphics context, boolean left, boolean isCompact, float original_Y, Minecraft mc, float scale) {
-        final int[] _y = {(int) (original_Y + (isCompact ? COMPACT_PORTRAIT_DIAMETER : PORTRAIT_DIAMETER))};
+    private static void renderHazard(GuiGraphics context, boolean left, boolean isCompact, Minecraft mc, float scale) {
+        final int[] _y = {(VERTICAL_INSET + ((isCompact ? COMPACT_PORTRAIT_DIAMETER : PORTRAIT_DIAMETER) * 4))};
         TerrainBattleState.getHazardStates(left).forEach((s, integer) -> {
             String text = s;
             if (integer > 1)
