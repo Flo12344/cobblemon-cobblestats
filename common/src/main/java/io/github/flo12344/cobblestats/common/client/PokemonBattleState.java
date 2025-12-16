@@ -10,7 +10,7 @@ public class PokemonBattleState {
     private final Map<String, Integer> states = new HashMap<>();
     private final Set<String> typesAdded = new HashSet<>();
     private final Set<String> extraEffects = new HashSet<>();
-    private final Map<String, Integer> turnBasedffects = new HashMap<>();
+    private final Map<String, Integer> turnBasedExtraEffects = new HashMap<>();
 
     private String typeOverride = "";
 
@@ -48,7 +48,15 @@ public class PokemonBattleState {
     }
 
     public void addExtraEffect(String effect) {
-        extraEffects.add(effect);
+        if (effect == "stockpile") {
+            if (turnBasedExtraEffects.containsKey(effect)) {
+                turnBasedExtraEffects.put(effect, turnBasedExtraEffects.get(effect) + 1);
+            } else {
+                turnBasedExtraEffects.put(effect, 1);
+            }
+        } else {
+            extraEffects.add(effect);
+        }
     }
 
     public void removeExtraEffect(String effect) {
@@ -86,6 +94,15 @@ public class PokemonBattleState {
             );
         }
 
+        if (!turnBasedExtraEffects.isEmpty()) {
+            turnBasedExtraEffects.forEach(
+                    (s, v) -> {
+                        TranslatableContents translatableContents = new TranslatableContents("cobblemon.move." + s, null, new Object[]{});
+                        Component component = MutableComponent.create(translatableContents);
+                        result.add(component.getString() + " " + v);
+                    }
+            );
+        }
         states.forEach((s, integer) -> {
             result.add(s + " " + statToString(s, integer));
         });
