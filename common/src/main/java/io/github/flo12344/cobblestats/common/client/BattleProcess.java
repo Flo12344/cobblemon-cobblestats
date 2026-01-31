@@ -16,11 +16,13 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+
 import java.util.Objects;
 
 import static com.cobblemon.mod.common.client.gui.battle.BattleOverlay.*;
 
 public class BattleProcess {
+
 
     @SuppressWarnings("unused")
     public static void drawUI(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, int rank, boolean isHovered, boolean isCompact) {
@@ -57,7 +59,12 @@ public class BattleProcess {
         {
             var formName = battlePokemon.getProperties().getForm();
             var currentForm = battlePokemon.getSpecies().getForms().stream()
-                    .filter(form -> form.getName().toLowerCase().equals(formName))
+                    .filter(form -> {
+                        if (form.getName().contains("-"))
+                            return form.getName().replace("-", "").toLowerCase().equals(formName);
+
+                        return form.getName().toLowerCase().equals(formName);
+                    })
                     .findFirst()
                     .orElse(battlePokemon.getSpecies().getStandardForm());
             var primaryType = currentForm.getPrimaryType();
