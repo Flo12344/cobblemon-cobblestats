@@ -59,12 +59,10 @@ public class BattleProcess {
         {
             var formName = battlePokemon.getProperties().getForm();
             var currentForm = battlePokemon.getSpecies().getForms().stream()
-                    .filter(form -> {
-                        if (form.getName().contains("-"))
-                            return form.getName().replace("-", "").toLowerCase().equals(formName);
-
-                        return form.getName().toLowerCase().equals(formName);
-                    })
+                    .filter(form -> form.getName()
+                            .replace("-", "")
+                            .toLowerCase()
+                            .equals(formName))
                     .findFirst()
                     .orElse(battlePokemon.getSpecies().getStandardForm());
             var primaryType = currentForm.getPrimaryType();
