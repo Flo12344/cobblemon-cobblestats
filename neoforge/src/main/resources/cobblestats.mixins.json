@@ -10,8 +10,9 @@
     "client.CSBattleOverlayMixin"
   ],
   "mixins": [
-    "cobblemonraiddens.RaidBattleStartEventMixin",
+    "cobblemonraiddens.RaidBoostInstructionMixin",
     "cobblemonraiddens.RaidClearAllBoostInstructionMixin",
+    "cobblemonraiddens.RaidClearBoostInstructionMixin",
     "server.CSBattleEndMixin",
     "server.CSFaintInstructionMixin",
     "server.CSHealInstructionMixin",
