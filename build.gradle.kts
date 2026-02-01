@@ -1,10 +1,10 @@
 plugins {
     id("java")
     id("java-library")
-    kotlin("jvm") version("2.2.10")
+    kotlin("jvm") version ("2.2.10")
 
-    id("dev.architectury.loom") version("1.11-SNAPSHOT") apply false
-    id("architectury-plugin") version("3.4-SNAPSHOT")
+    id("dev.architectury.loom") version ("1.11-SNAPSHOT") apply false
+    id("architectury-plugin") version ("3.4-SNAPSHOT")
 }
 
 allprojects {
@@ -19,6 +19,7 @@ allprojects {
         maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
         maven("https://maven.impactdev.net/repository/development/")
         maven("https://maven.neoforged.net/releases")
+        maven("https://api.modrinth.com/maven")
         maven("https://thedarkcolour.github.io/KotlinForForge/")
     }
 
@@ -28,7 +29,7 @@ allprojects {
 
     java {
         withSourcesJar()
-        
+
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }

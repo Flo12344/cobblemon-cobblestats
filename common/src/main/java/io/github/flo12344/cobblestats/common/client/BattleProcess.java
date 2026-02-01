@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.ActorType;
 import com.cobblemon.mod.common.api.gui.GuiUtilsKt;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon;
+import com.cobblemon.mod.common.client.gui.TypeIcon;
 import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket;
 import io.github.flo12344.cobblestats.common.client.net.ClientData;
 import net.minecraft.client.Minecraft;
@@ -31,7 +32,6 @@ public class BattleProcess {
         if (battle == null) {
             return;
         }
-
         int playerNumberOffset = (Character.getNumericValue(activeBattlePokemon.getActorShowdownId().charAt(1)) - 1) / 2 * 10;
 
         float original_Y = VERTICAL_INSET + rank * (isCompact ? COMPACT_VERTICAL_SPACING : VERTICAL_SPACING) + (left ? playerNumberOffset : (battle.getBattleFormat().getBattleType().getActorsPerSide() - 1) * 10 - playerNumberOffset);
@@ -45,11 +45,6 @@ public class BattleProcess {
 
         original_X += left ? infoOffsetX + portraitDiameter : 0;
         original_Y += portraitOffsetY + portraitDiameter * .75F;
-
-//        var hue = activeBattlePokemon.getHue();
-//        float r = ((hue >> 16) & 0b11111111) / 255F;
-//        float g = ((hue >> 8) & 0b11111111) / 255F;
-//        float b = (hue & 0b11111111) / 255F;
 
         {
             var x = (left ? (float) portraitDiameter / 2 : mc.getWindow().getGuiScaledWidth() - (float) portraitDiameter / 2);
