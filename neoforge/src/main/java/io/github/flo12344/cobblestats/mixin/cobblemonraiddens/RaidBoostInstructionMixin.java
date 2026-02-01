@@ -38,7 +38,6 @@ public class RaidBoostInstructionMixin {
         if (battlePokemon == null || battlePokemon.getEntity() == null) return;
         else if (!((IRaidAccessor) battlePokemon.getEntity()).isRaidBoss()) return;
         if (battlePokemon.actor.getSide() == battle.getSide1()) return;
-        System.out.println(message.getRawMessage());
 
         var severity = Stats.Companion.getSeverity(Integer.parseInt(message.argumentAt(2)));
         var rootKey = (isBoost) ? "boost" : "unboost";

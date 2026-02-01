@@ -3,7 +3,7 @@ package io.github.flo12344.cobblestats.mixin.cobblemonraiddens;
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
 import com.cobblemon.mod.common.battles.BattleRegistry;
-import com.cobblemon.mod.common.battles.interpreter.instructions.ClearBoostInstruction;
+import com.cobblemon.mod.common.battles.interpreter.instructions.ClearNegativeBoostInstruction;
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
 import com.necro.raid.dens.common.raids.RaidInstance;
 import com.necro.raid.dens.common.util.IRaidAccessor;
@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static com.cobblemon.mod.common.util.LocalizationUtilsKt.battleLang;
 
 
-@Mixin(ClearBoostInstruction.class)
-public class RaidClearBoostInstructionMixin {
+@Mixin(ClearNegativeBoostInstruction.class)
+public class RaidClearNegativeBoostInstructionMixin {
     @Shadow(remap = false)
     BattleMessage message;
 
@@ -31,8 +31,10 @@ public class RaidClearBoostInstructionMixin {
         else if (!((IRaidAccessor) battlePokemon.getEntity()).isRaidBoss()) return;
         if (battlePokemon.actor.getSide() == battle.getSide1()) return;
 
-        var pokemonName = battlePokemon.getName();
-        var lang = battleLang("clearboost", pokemonName);
+        var lang = message.hasOptionalArgument("zeffect") ?
+                battleLang("clearallnegativeboost.zeffect", battlePokemon.getName()) :
+                battleLang("clearallnegativeboost", battlePokemon.getName());
+
         raid.getPlayers().forEach(serverPlayer -> {
             var b = BattleRegistry.getBattleByParticipatingPlayer(serverPlayer);
             if (b == battle) return;

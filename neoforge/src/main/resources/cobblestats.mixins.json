@@ -13,6 +13,7 @@
     "cobblemonraiddens.RaidBoostInstructionMixin",
     "cobblemonraiddens.RaidClearAllBoostInstructionMixin",
     "cobblemonraiddens.RaidClearBoostInstructionMixin",
+    "cobblemonraiddens.RaidClearNegativeBoostInstructionMixin",
     "server.CSBattleEndMixin",
     "server.CSFaintInstructionMixin",
     "server.CSHealInstructionMixin",
