@@ -11,6 +11,7 @@
   ],
   "mixins": [
     "cobblemonraiddens.RaidBattleStartEventMixin",
+    "cobblemonraiddens.RaidClearAllBoostInstructionMixin",
     "server.CSBattleEndMixin",
     "server.CSFaintInstructionMixin",
     "server.CSHealInstructionMixin",

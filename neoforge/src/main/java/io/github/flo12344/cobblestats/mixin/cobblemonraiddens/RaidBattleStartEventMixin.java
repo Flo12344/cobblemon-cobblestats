@@ -19,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static com.cobblemon.mod.common.util.LocalizationUtilsKt.battleLang;
 
 
-//wrong method try modifying the bettle message
 @Mixin(BoostInstruction.class)
 public class RaidBattleStartEventMixin {
     @Shadow(remap = false)
@@ -32,7 +31,7 @@ public class RaidBattleStartEventMixin {
     private boolean isBoost;
 
     @Inject(method = "postActionEffect", at = @At("TAIL"), remap = false)
-    void RaidBattleStartEvent(PokemonBattle battle, CallbackInfo ci) {
+    void RaidBoostInstructionMixin(PokemonBattle battle, CallbackInfo ci) {
         if (!((IRaidBattle) battle).isRaidBattle()) return;
         RaidInstance raid = ((IRaidBattle) battle).getRaidBattle();
         BattlePokemon battlePokemon = this.pokemon;
