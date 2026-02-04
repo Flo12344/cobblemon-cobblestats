@@ -1,0 +1,9 @@
+{
+  "battle.cobblestats.stat.attack": "Atq",
+  "battle.cobblestats.stat.special_attack": "Atq Spé",
+  "battle.cobblestats.stat.defence": "Déf",
+  "battle.cobblestats.stat.special_defence": "Déf Spé",
+  "battle.cobblestats.stat.speed": "Vit",
+  "battle.cobblestats.stat.accuracy": "Précision",
+  "battle.cobblestats.stat.evasion": "Évasion"
+}

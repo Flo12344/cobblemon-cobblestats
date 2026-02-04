@@ -1,0 +1,9 @@
+{
+  "battle.cobblestats.stat.attack": "Angr",
+  "battle.cobblestats.stat.special_attack": "Sp-Angr",
+  "battle.cobblestats.stat.defence": "Vert",
+  "battle.cobblestats.stat.special_defence": "Sp-Vert",
+  "battle.cobblestats.stat.speed": "Init",
+  "battle.cobblestats.stat.accuracy": "Genauigkeit",
+  "battle.cobblestats.stat.evasion": "Fluchtwert"
+}
