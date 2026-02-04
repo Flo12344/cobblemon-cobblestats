@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "io.github.flo12344.cobblestats.common",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+  ],
+  "mixins": [
+    "compat.cobblemonraiddens.mixin.RaidBoostInstructionMixin",
+    "compat.cobblemonraiddens.mixin.RaidClearAllBoostInstructionMixin",
+    "compat.cobblemonraiddens.mixin.RaidClearBoostInstructionMixin",
+    "compat.cobblemonraiddens.mixin.RaidClearNegativeBoostInstructionMixin",
+    "compat.cobblemonraiddens.mixin.RaidEndInstructionMixin",
+    "compat.cobblemonraiddens.mixin.RaidStartInstructionMixin",
+    "compat.cobblemonraiddens.mixin.RaidWeatherInstructionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
