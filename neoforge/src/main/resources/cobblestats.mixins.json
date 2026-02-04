@@ -1,6 +1,5 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "io.github.flo12344.cobblestats.mixin",
   "plugin": "io.github.flo12344.cobblestats.mixin.CobbleStatsMixinPlugin",
   "compatibilityLevel": "JAVA_21",
@@ -10,6 +9,7 @@
     "client.CSBattleOverlayMixin"
   ],
   "mixins": [
+    "cobblemonraiddens.RaidBroadcastMixin",
     "server.CSBattleEndMixin",
     "server.CSFaintInstructionMixin",
     "server.CSHealInstructionMixin",

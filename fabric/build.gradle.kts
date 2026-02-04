@@ -34,7 +34,7 @@ dependencies {
     modImplementation(fabricApi.module("fabric-game-rule-api-v1", property("fabric_api_version").toString()))
     modImplementation(fabricApi.module("fabric-lifecycle-events-v1", property("fabric_api_version").toString()))
 
-    compileOnly("maven.modrinth:cobblemonraiddens:0.5.5+1.21.1-fabric")
+    modCompileOnly("maven.modrinth:cobblemonraiddens:0.5.5+1.21.1-fabric")
 
     //needed for cobblemon
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin")}")

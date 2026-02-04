@@ -9,7 +9,7 @@ architectury {
 
 loom {
     silentMojangMappingsLicense()
-    3
+
 }
 
 dependencies {

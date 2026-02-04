@@ -23,6 +23,7 @@ repositories {
     maven("https://maven.neoforged.net")
 }
 
+
 val shadowBundle = configurations.create("shadowBundle") {
     isCanBeConsumed = false
     isCanBeResolved = true
@@ -38,7 +39,7 @@ dependencies {
     forgeRuntimeLibrary("thedarkcolour:kotlinforforge-neoforge:${property("kotlin_for_forge_version")}") {
         exclude("net.neoforged.fancymodloader", "loader")
     }
-    compileOnly("maven.modrinth:cobblemonraiddens:0.5.5+1.21.1-neoforge")
+    modCompileOnly("maven.modrinth:cobblemonraiddens:0.5.5+1.21.1-neoforge")
 
     implementation(project(":common", configuration = "namedElements"))
     "developmentNeoForge"(project(":common", configuration = "namedElements")) {

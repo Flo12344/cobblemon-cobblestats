@@ -21,7 +21,7 @@ public class CobbleStatsMixinPlugin implements IMixinConfigPlugin{
 
   @Override
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName){
-    if(mixinClassName.startsWith("io.github.flo_12344.cobblestats.common.compat.cobblemonraiddens")){
+    if(mixinClassName.startsWith("io.github.flo12344.cobblestats.mixin.cobblemonraiddens")){
       return FabricLoader.getInstance().isModLoaded("cobblemonraiddens");
     }
     return true;

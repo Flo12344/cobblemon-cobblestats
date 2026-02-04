@@ -1,6 +1,6 @@
 package io.github.flo12344.cobblestats.mixin;
 
-import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -21,8 +21,8 @@ public class CobbleStatsMixinPlugin implements IMixinConfigPlugin{
 
   @Override
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName){
-    if(mixinClassName.startsWith("io.github.flo_12344.cobblestats.common.compat.cobblemonraiddens")){
-      return ModList.get().isLoaded("cobblemonraiddens");
+    if(mixinClassName.startsWith("io.github.flo12344.cobblestats.mixin.cobblemonraiddens")){
+      return LoadingModList.get().getModFileById("cobblemonraiddens") != null;
     }
     return true;
   }
