@@ -14,6 +14,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+
 
 import java.util.Objects;
 
@@ -21,6 +23,8 @@ import static com.cobblemon.mod.common.client.gui.battle.BattleOverlay.*;
 
 public class BattleProcess {
 
+
+    @SuppressWarnings("unused")
     public static void drawUI(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, int rank, boolean isHovered, boolean isCompact) {
         var mc = Minecraft.getInstance();
 
@@ -47,6 +51,16 @@ public class BattleProcess {
         original_Y += portraitOffsetY + portraitDiameter * .75F;
 
         {
+            var formName = battlePokemon.getProperties().getForm();
+            var currentForm = battlePokemon.getSpecies().getForms().stream()
+                    .filter(form -> form.getName()
+                            .replace("-", "")
+                            .toLowerCase()
+                            .equals(formName))
+                    .findFirst()
+                    .orElse(battlePokemon.getSpecies().getStandardForm());
+            var primaryType = currentForm.getPrimaryType();
+            var secondaryType = currentForm.getSecondaryType();
             var x = (left ? (float) portraitDiameter / 2 : mc.getWindow().getGuiScaledWidth() - (float) portraitDiameter / 2);
             var matrix = context.pose();
             matrix.pushPose();
@@ -54,36 +68,22 @@ public class BattleProcess {
             float ball_size = 0.45f;
             matrix.scale(ball_size, ball_size, ball_size);
             TypeIcon icon = new TypeIcon(0, 0,
-                    battlePokemon.getSpecies().getPrimaryType(),
-                    battlePokemon.getSpecies().getSecondaryType(),
+                    primaryType,
+                    secondaryType,
                     true, false,
                     18, 4, 1.0f);
             icon.render(context);
             matrix.popPose();
         }
 
-        String key;
-        var value = activeBattlePokemon.getBattlePokemon().getDisplayName().getContents();
-        if (value instanceof TranslatableContents) {
-            key = ((TranslatableContents) value).getKey();
-        } else {
-            key = ((PlainTextContents.LiteralContents) value).text();
-        }
-
-        if (activeBattlePokemon.getBattlePokemon().getActor().getDisplayName().getContents() instanceof PlainTextContents.LiteralContents(
-                String text1
-        )) {
-            key = text1 + "/" + key;
-        } else if (activeBattlePokemon.getBattlePokemon().getActor().getDisplayName().getContents() instanceof TranslatableContents translatableContents) {
-            if (!translatableContents.getKey().contains(".") || translatableContents.getKey().contains("trainer"))
-                key = translatableContents.getKey() + "/" + key;
-        }
+        String key = getKey(activeBattlePokemon);
 
         original_X += 5;
         var stats = BattleStateTracker.getChangedStats(key);
         var maxX = isCompact ? (COMPACT_TILE_WIDTH - COMPACT_PORTRAIT_DIAMETER - COMPACT_PORTRAIT_OFFSET_Y * 2) : (TILE_WIDTH - PORTRAIT_DIAMETER - PORTRAIT_OFFSET_Y * 2) - 1F;
         final float[] x = {original_X};
         final float[] finalOriginal_X = {original_X};
+        assert activeBattlePokemon.getBattlePokemon() != null;
         if (activeBattlePokemon.getBattlePokemon().getStatus() != null) {
             if (left) {
                 x[0] += 35;
@@ -98,7 +98,7 @@ public class BattleProcess {
                 x[0] = finalOriginal_X[0];
                 y[0] += mc.font.lineHeight * scale + 3;
             }
-            x[0] = drawStats(context, mc.font, s, (int) x[0], (int) y[0], scale, 0xFFFFFF) + 3;
+            x[0] = drawStats(context, mc.font, s, (int) x[0], (int) y[0]) + 3;
         });
 
 
@@ -115,14 +115,14 @@ public class BattleProcess {
                 }
                 int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
 
-                drawStats(context, mc.font, text, (int) x_pos, y_pos[0], scale, 0xFFFFFF);
+                drawStats(context, mc.font, text, x_pos, y_pos[0]);
                 y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
             }
 
             TerrainBattleState.getRoomState().forEach((s, integer) -> {
                 String text = s + " " + integer;
                 int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
-                drawStats(context, mc.font, text, (int) x_pos, y_pos[0], scale, 0xFFFFFF);
+                drawStats(context, mc.font, text, x_pos, y_pos[0]);
                 y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
             });
 
@@ -137,12 +137,12 @@ public class BattleProcess {
                     }
                 }
                 int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
-                drawStats(context, mc.font, text, (int) x_pos, y_pos[0], scale, 0xFFFFFF);
+                drawStats(context, mc.font, text, x_pos, y_pos[0]);
                 y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
             }
         }
 
-        renderHazard(context, left, isCompact, mc, scale);
+        renderHazard(context, left, isCompact, mc);
         if (!ClientData.SERVER_COMPAT) return;
         if (!left && activeBattlePokemon.getActor().getType() == ActorType.WILD) return;
         var pokeballX = HORIZONTAL_INSET;
@@ -185,7 +185,28 @@ public class BattleProcess {
         matrix.popPose();
     }
 
-    private static void renderHazard(GuiGraphics context, boolean left, boolean isCompact, Minecraft mc, float scale) {
+    private static @NotNull String getKey(ActiveClientBattlePokemon activeBattlePokemon) {
+        String key;
+        assert activeBattlePokemon.getBattlePokemon() != null;
+        var value = activeBattlePokemon.getBattlePokemon().getDisplayName().getContents();
+        if (value instanceof TranslatableContents) {
+            key = ((TranslatableContents) value).getKey();
+        } else {
+            key = ((PlainTextContents.LiteralContents) value).text();
+        }
+
+        if (activeBattlePokemon.getBattlePokemon().getActor().getDisplayName().getContents() instanceof PlainTextContents.LiteralContents(
+                String text1
+        )) {
+            key = text1 + "/" + key;
+        } else if (activeBattlePokemon.getBattlePokemon().getActor().getDisplayName().getContents() instanceof TranslatableContents translatableContents) {
+            if (!translatableContents.getKey().contains(".") || translatableContents.getKey().contains("trainer"))
+                key = translatableContents.getKey() + "/" + key;
+        }
+        return key;
+    }
+
+    private static void renderHazard(GuiGraphics context, boolean left, boolean isCompact, Minecraft mc) {
         final int[] _y = {(VERTICAL_INSET + ((isCompact ? COMPACT_PORTRAIT_DIAMETER : PORTRAIT_DIAMETER) * 4))};
         TerrainBattleState.getHazardStates(left).forEach((s, integer) -> {
             String text = s;
@@ -193,10 +214,10 @@ public class BattleProcess {
                 text += " " + integer;
             int _x = VERTICAL_INSET;
             if (!left) {
-                _x = mc.getWindow().getGuiScaledWidth() - _x - ((int) (mc.font.width(text) * scale));
+                _x = mc.getWindow().getGuiScaledWidth() - _x - ((int) (mc.font.width(text) * (float) 0.5));
             }
-            drawStats(context, mc.font, text, _x, _y[0], scale, 0xFFFFFF);
-            _y[0] += (int) (mc.font.lineHeight * scale) + 3;
+            drawStats(context, mc.font, text, _x, _y[0]);
+            _y[0] += (int) (mc.font.lineHeight * (float) 0.5) + 3;
         });
     }
 
@@ -249,6 +270,7 @@ public class BattleProcess {
                     } else {
                         pokemon = (String) object_args[0];
                     }
+                    assert Minecraft.getInstance().player != null;
                     String owner = Minecraft.getInstance().player.getDisplayName().getString();
                     switchedTo = owner + "/" + pokemon;
                 } else {
@@ -283,6 +305,7 @@ public class BattleProcess {
                     } else {
                         pokemon = (String) object_args[0];
                     }
+                    assert Minecraft.getInstance().player != null;
                     String owner = Minecraft.getInstance().player.getDisplayName().getString();
                     toRemove = owner + "/" + pokemon;
                 } else {
@@ -341,32 +364,16 @@ public class BattleProcess {
                 break;
             case "sidestart":
                 if (MainActionSplit.length == 5) {
-                    if (MainActionSplit[3].equals("opponent")) {
-                        TerrainBattleState.addHazard(false, MainActionSplit[4]);
-                    } else {
-                        TerrainBattleState.addHazard(true, MainActionSplit[4]);
-                    }
+                    TerrainBattleState.addHazard(!MainActionSplit[3].equals("opponent"), MainActionSplit[4]);
                 } else {
-                    if (((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally")) {
-                        TerrainBattleState.addHazard(true, MainActionSplit[3]);
-                    } else {
-                        TerrainBattleState.addHazard(false, MainActionSplit[3]);
-                    }
+                    TerrainBattleState.addHazard(((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally"), MainActionSplit[3]);
                 }
                 break;
             case "sideend":
                 if (MainActionSplit.length == 5) {
-                    if (MainActionSplit[3].equals("opponent")) {
-                        TerrainBattleState.removeHazard(false, MainActionSplit[4]);
-                    } else {
-                        TerrainBattleState.removeHazard(true, MainActionSplit[4]);
-                    }
+                    TerrainBattleState.removeHazard(!MainActionSplit[3].equals("opponent"), MainActionSplit[4]);
                 } else {
-                    if (((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally")) {
-                        TerrainBattleState.removeHazard(true, MainActionSplit[3]);
-                    } else {
-                        TerrainBattleState.removeHazard(false, MainActionSplit[3]);
-                    }
+                    TerrainBattleState.removeHazard(((TranslatableContents) ((MutableComponent) object_args[0]).getContents()).getKey().contains("ally"), MainActionSplit[3]);
                 }
                 break;
             case "weather":
@@ -423,17 +430,17 @@ public class BattleProcess {
     private static final int BG = 0x888D8D8D;
     private static final int BORDER = 0xFF2F2F2F;
 
-    private static int drawStats(GuiGraphics ctx, Font font, String text, int x, int y, float scale, int color) {
+    private static int drawStats(GuiGraphics ctx, Font font, String text, int x, int y) {
         int margin = 1;
-        ctx.fill(x - margin, y - margin, x + (int) (font.width(text) * scale) + margin, y + (int) (font.lineHeight * scale) + margin, BG);
-        ctx.renderOutline(x - margin * 2, y - margin * 2, (int) (font.width(text) * scale) + margin * 4, (int) (font.lineHeight * scale) + margin * 4, BORDER);
+        ctx.fill(x - margin, y - margin, x + (int) (font.width(text) * (float) 0.5) + margin, y + (int) (font.lineHeight * (float) 0.5) + margin, BG);
+        ctx.renderOutline(x - margin * 2, y - margin * 2, (int) (font.width(text) * (float) 0.5) + margin * 4, (int) (font.lineHeight * (float) 0.5) + margin * 4, BORDER);
 
         ctx.pose().pushPose();
         ctx.pose().translate(x, y, 0);
-        ctx.pose().scale(scale, scale, 0);
-        ctx.drawString(font, text, 0, 0, color, true);
+        ctx.pose().scale((float) 0.5, (float) 0.5, 0);
+        ctx.drawString(font, text, 0, 0, 16777215, true);
         ctx.pose().popPose();
-        return x + (int) (font.width(text) * scale) + margin;
+        return x + (int) (font.width(text) * (float) 0.5) + margin;
     }
 
     public static void checkSide(BattleInitializePacket.BattleSideDTO side) {
