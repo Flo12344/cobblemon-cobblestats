@@ -20,19 +20,23 @@ public class CobblestatsClientConfig{
   public static boolean loaded = false;
 
   public static boolean AccuratePokeballIfAvailable = true;
+  public static boolean ForceHidePokeball = false;
   public static boolean ShowPokemonType = true;
 
   public static boolean ShowStatsStages = true;
   public static boolean ShowHazards = true;
   public static boolean ShowWeather = true;
+  public static boolean ShowTerrain = true;
   public static boolean ShowOther = true;
 
   private static @NotNull JsonObject getJsonObject(){
     JsonObject json = new JsonObject();
+    json.addProperty("ForceHidePokeball", ForceHidePokeball);
     json.addProperty("AccuratePokeballIfAvailable", AccuratePokeballIfAvailable);
     json.addProperty("ShowPokemonType", ShowPokemonType);
 
     json.addProperty("ShowStatsStages", ShowStatsStages);
+    json.addProperty("ShowTerrain", ShowTerrain);
     json.addProperty("ShowHazards", ShowHazards);
     json.addProperty("ShowWeather", ShowWeather);
     json.addProperty("ShowOther", ShowOther);
@@ -65,7 +69,9 @@ public class CobblestatsClientConfig{
       Gson gson = new Gson();
       JsonObject json = gson.fromJson(reader, JsonObject.class);
 
-
+      if(json.has("ForceHidePokeball")){
+        ForceHidePokeball = json.get("ForceHidePokeball").getAsBoolean();
+      }
       if(json.has("AccuratePokeballIfAvailable")){
         AccuratePokeballIfAvailable = json.get("AccuratePokeballIfAvailable").getAsBoolean();
       }
@@ -74,6 +80,9 @@ public class CobblestatsClientConfig{
       }
       if(json.has("ShowStatsStages")){
         ShowStatsStages = json.get("ShowStatsStages").getAsBoolean();
+      }
+      if(json.has("ShowTerrain")){
+        ShowTerrain = json.get("ShowTerrain").getAsBoolean();
       }
       if(json.has("ShowHazards")){
         ShowHazards = json.get("ShowHazards").getAsBoolean();

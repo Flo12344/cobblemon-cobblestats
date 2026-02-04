@@ -82,37 +82,41 @@ public class PokemonBattleState{
 
   public List<String> getStats(){
     List<String> result = new ArrayList<>();
-    if(!Objects.equals(typeOverride, ""))
-      result.add(typeOverride);
+    if(CobblestatsClientConfig.ShowOther){
+      if(!Objects.equals(typeOverride, "")){result.add(typeOverride);}
 
-    if(!typesAdded.isEmpty()){
-      typesAdded.forEach(s -> result.add("+" + s));
+      if(!typesAdded.isEmpty()){
+        typesAdded.forEach(s -> result.add("+" + s));
+      }
+
+      if(!extraEffects.isEmpty()){
+        extraEffects.forEach(
+                s -> {
+                  TranslatableContents translatableContents = new TranslatableContents("cobblemon.move." + s, null, new Object[]{});
+                  Component component = MutableComponent.create(translatableContents);
+                  result.add(component.getString());
+                }
+        );
+      }
+
+      if(!turnBasedExtraEffects.isEmpty()){
+        turnBasedExtraEffects.forEach(
+                (s, v) -> {
+                  TranslatableContents translatableContents = new TranslatableContents("cobblemon.move." + s, null, new Object[]{});
+                  Component component = MutableComponent.create(translatableContents);
+                  result.add(component.getString() + " " + v);
+                }
+        );
+      }
     }
 
-    if(!extraEffects.isEmpty()){
-      extraEffects.forEach(
-              s -> {
-                TranslatableContents translatableContents = new TranslatableContents("cobblemon.move." + s, null, new Object[]{});
-                Component component = MutableComponent.create(translatableContents);
-                result.add(component.getString());
-              }
-      );
+    if(CobblestatsClientConfig.ShowStatsStages){
+      states.forEach((s, integer) -> {
+        result.add(MutableComponent.create(
+                new TranslatableContents("battle.cobblestats.stat." + s, null, new Object[]{})).getString()
+                + " " + statToString(s, integer));
+      });
     }
-
-    if(!turnBasedExtraEffects.isEmpty()){
-      turnBasedExtraEffects.forEach(
-              (s, v) -> {
-                TranslatableContents translatableContents = new TranslatableContents("cobblemon.move." + s, null, new Object[]{});
-                Component component = MutableComponent.create(translatableContents);
-                result.add(component.getString() + " " + v);
-              }
-      );
-    }
-    states.forEach((s, integer) -> {
-      result.add(MutableComponent.create(
-              new TranslatableContents("battle.cobblestats.stat." + s, null, new Object[]{})).getString()
-              + " " + statToString(s, integer));
-    });
 
 
     return result;
