@@ -8,7 +8,7 @@
     "Flo_12344"
   ],
   "license": "GPL3 License",
-  "icon": "assets/cobblestats/logo.png",
+  "icon": "assets/cobblestats/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
