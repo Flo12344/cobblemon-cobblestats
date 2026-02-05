@@ -11,7 +11,7 @@ authors = "Flo_12344"
 description = '''
 Brings Showdown-like stats/terrain info in battles
 '''
-logoFile = "../../../../../common/src/main/resources/assets/cobblestats/logo.png"
+logoFile = "../../../../common/src/main/resources/assets/cobblestats/icon.png"
 
 [[dependencies.cobblestats]]
 modId = "minecraft"

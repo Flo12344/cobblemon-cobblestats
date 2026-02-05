@@ -16,9 +16,9 @@ public abstract class RaidBroadcastMixin{
 
   @Inject(method = "broadcastChatMessage", at = @At("HEAD"), remap = false)
   void broadcastChatMessage(Component component, CallbackInfo ci){
-    if(!((IRaidBattle) this).isRaidBattle())
+    if(!((IRaidBattle) this).crd_isRaidBattle())
       return;
-    RaidInstance raid = ((IRaidBattle) this).getRaidBattle();
+    RaidInstance raid = ((IRaidBattle) this).crd_getRaidBattle();
     raid.getPlayers().forEach(serverPlayer -> {
       var b = BattleRegistry.getBattleByParticipatingPlayer(serverPlayer);
 

@@ -39,7 +39,7 @@ dependencies {
     forgeRuntimeLibrary("thedarkcolour:kotlinforforge-neoforge:${property("kotlin_for_forge_version")}") {
         exclude("net.neoforged.fancymodloader", "loader")
     }
-    modCompileOnly("maven.modrinth:cobblemonraiddens:0.5.5+1.21.1-neoforge")
+    modCompileOnly("maven.modrinth:cobblemonraiddens:${property("cobblemonraiddens_version")}+1.21.1-neoforge")
 
     implementation(project(":common", configuration = "namedElements"))
     "developmentNeoForge"(project(":common", configuration = "namedElements")) {

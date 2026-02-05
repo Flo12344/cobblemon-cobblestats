@@ -3,7 +3,7 @@ plugins {
     id("java-library")
     kotlin("jvm") version ("2.2.10")
 
-    id("dev.architectury.loom") version ("1.11-SNAPSHOT") apply false
+    id("dev.architectury.loom") version ("1.13.467") apply false
     id("architectury-plugin") version ("3.4-SNAPSHOT")
 }
 

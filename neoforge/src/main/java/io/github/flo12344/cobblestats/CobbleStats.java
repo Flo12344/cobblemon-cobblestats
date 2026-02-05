@@ -17,6 +17,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public class CobbleStats{
   public CobbleStats(){
     CobblestatsClientConfig.load();
+
+
     NeoForge.EVENT_BUS.addListener(ClientPlayerNetworkEvent.LoggingIn.class, loggingIn -> {
       Minecraft minecraft = Minecraft.getInstance();
       ClientPacketListener netHandler = minecraft.getConnection();
