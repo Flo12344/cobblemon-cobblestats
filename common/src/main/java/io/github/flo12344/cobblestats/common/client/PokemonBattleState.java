@@ -37,6 +37,11 @@ public class PokemonBattleState {
         }
     }
 
+    public void setAllBoosts(PokemonBattleState state) {
+        states.clear();
+        states.putAll(state.states);
+    }
+
 
     public void addType(String type) {
         typesAdded.add(type);
@@ -136,7 +141,7 @@ public class PokemonBattleState {
             case "severe" -> {
                 return 3;
             }
-            case "max" -> {
+            case "max", "cap" -> {
                 return 12;
             }
             default -> {
@@ -149,12 +154,12 @@ public class PokemonBattleState {
         return switch (CobblestatsClientConfig.StatsRenderType) {
             case MULTIPLIER -> statToMult(stat, value);
             case ARROW -> statToArrow(value);
-            case NUMBER -> "+" + value;
+            case NUMBER -> value > 0 ? "+" + value : "" + value;
         };
     }
 
     private String statToArrow(Integer value) {
-        return value > 0 ? "▲".repeat(value) : "▼".repeat(value);
+        return value > 0 ? "▲".repeat(value) : "▼".repeat(Math.abs(value));
     }
 
     private String statToMult(String stat, Integer value) {
