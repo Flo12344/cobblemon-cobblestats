@@ -31,6 +31,8 @@ public class CobblestatsClientConfig {
     public static boolean ShowWeather = true;
     public static boolean ShowTerrain = true;
     public static boolean ShowOther = true;
+    public static float StatsFontScale = 0.5f;
+    public static float OtherFontScale = 0.5f;
 
     private static @NotNull JsonObject getJsonObject() {
         JsonObject json = new JsonObject();
@@ -45,6 +47,8 @@ public class CobblestatsClientConfig {
         json.addProperty("ShowOther", ShowOther);
 
         json.addProperty("StatsRenderType", StatsRenderType.toString());
+        json.addProperty("StatsFontScale", StatsFontScale);
+        json.addProperty("OtherFontScale", OtherFontScale);
         return json;
     }
 
@@ -100,6 +104,12 @@ public class CobblestatsClientConfig {
             }
             if (json.has("StatsRenderType")) {
                 StatsRenderType = StatRender.valueOf(json.get("StatsRenderType").getAsString().toUpperCase());
+            }
+            if (json.has("StatsFontScale")) {
+                StatsFontScale = json.get("StatsFontScale").getAsFloat();
+            }
+            if (json.has("OtherFontScale")) {
+                OtherFontScale = json.get("OtherFontScale").getAsFloat();
             }
         } catch (Exception e) {
             LogUtils.getLogger().error("Failed to save CobbleStats config:", e);

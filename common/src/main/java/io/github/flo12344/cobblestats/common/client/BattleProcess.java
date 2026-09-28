@@ -90,17 +90,17 @@ public class BattleProcess {
                 finalOriginal_X[0] -= 35;
             }
         }
-        final float scale = 0.5f;
         final float[] y = {original_Y};
         stats.forEach(s -> {
+            float scale = CobblestatsClientConfig.StatsFontScale;
             if (x[0] + ((int) (mc.font.width(s) * scale)) > finalOriginal_X[0] + maxX) {
                 x[0] = finalOriginal_X[0];
                 y[0] += mc.font.lineHeight * scale + 3;
             }
-            x[0] = drawStats(context, mc.font, s, (int) x[0], (int) y[0]) + 3;
+            x[0] = drawStats(context, mc.font, s, (int) x[0], (int) y[0], scale) + 3;
         });
 
-
+        final float scale = CobblestatsClientConfig.OtherFontScale;
         if (left) {
             final int[] y_pos = {VERTICAL_INSET + 30};
             if (!((String) TerrainBattleState.getTerrainState()[0]).isEmpty() && CobblestatsClientConfig.ShowTerrain) {
@@ -114,14 +114,14 @@ public class BattleProcess {
                 }
                 int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
 
-                drawStats(context, mc.font, text, x_pos, y_pos[0]);
+                drawStats(context, mc.font, text, x_pos, y_pos[0], scale);
                 y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
             }
 
             TerrainBattleState.getRoomState().forEach((s, integer) -> {
                 String text = s + " " + integer;
                 int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
-                drawStats(context, mc.font, text, x_pos, y_pos[0]);
+                drawStats(context, mc.font, text, x_pos, y_pos[0], scale);
                 y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
             });
 
@@ -137,7 +137,7 @@ public class BattleProcess {
                     }
                 }
                 int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale));
-                drawStats(context, mc.font, text, x_pos, y_pos[0]);
+                drawStats(context, mc.font, text, x_pos, y_pos[0], scale);
                 y_pos[0] += (int) (mc.font.lineHeight * scale) + 3;
             }
         }
@@ -218,7 +218,7 @@ public class BattleProcess {
             if (!left) {
                 _x = mc.getWindow().getGuiScaledWidth() - _x - ((int) (mc.font.width(text) * (float) 0.5));
             }
-            drawStats(context, mc.font, text, _x, _y[0]);
+            drawStats(context, mc.font, text, _x, _y[0], CobblestatsClientConfig.OtherFontScale);
             _y[0] += (int) (mc.font.lineHeight * (float) 0.5) + 3;
         });
     }
@@ -469,17 +469,17 @@ public class BattleProcess {
     private static final int BG = 0x888D8D8D;
     private static final int BORDER = 0xFF2F2F2F;
 
-    private static int drawStats(GuiGraphics ctx, Font font, String text, int x, int y) {
+    private static int drawStats(GuiGraphics ctx, Font font, String text, int x, int y, float size) {
         int margin = 1;
-        ctx.fill(x - margin, y - margin, x + (int) (font.width(text) * (float) 0.5) + margin, y + (int) (font.lineHeight * (float) 0.5) + margin, BG);
-        ctx.renderOutline(x - margin * 2, y - margin * 2, (int) (font.width(text) * (float) 0.5) + margin * 4, (int) (font.lineHeight * (float) 0.5) + margin * 4, BORDER);
+        ctx.fill(x - margin, y - margin, x + (int) (font.width(text) * size) + margin, y + (int) (font.lineHeight * size) + margin, BG);
+        ctx.renderOutline(x - margin * 2, y - margin * 2, (int) (font.width(text) * size) + margin * 4, (int) (font.lineHeight * size) + margin * 4, BORDER);
 
         ctx.pose().pushPose();
         ctx.pose().translate(x, y, 0);
-        ctx.pose().scale((float) 0.5, (float) 0.5, 0);
+        ctx.pose().scale(size, size, 0);
         ctx.drawString(font, text, 0, 0, 16777215, true);
         ctx.pose().popPose();
-        return x + (int) (font.width(text) * (float) 0.5) + margin;
+        return x + (int) (font.width(text) * size) + margin;
     }
 
     public static void checkSide(BattleInitializePacket.BattleSideDTO side) {

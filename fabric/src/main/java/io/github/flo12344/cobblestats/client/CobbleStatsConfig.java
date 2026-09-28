@@ -34,6 +34,19 @@ public class CobbleStatsConfig {
                 .setSaveConsumer(statRender -> CobblestatsClientConfig.StatsRenderType = statRender)
                 .build()
         );
+
+        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.stats_font_scale"),
+                        (int) (CobblestatsClientConfig.StatsFontScale * 100), 25, 150)
+                .setDefaultValue(50)
+                .setSaveConsumer(integer -> CobblestatsClientConfig.StatsFontScale = integer / 100f)
+                .build());
+
+        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.other_font_scale"),
+                        (int) (CobblestatsClientConfig.OtherFontScale * 100), 25, 250)
+                .setDefaultValue(50)
+                .setSaveConsumer(integer -> CobblestatsClientConfig.OtherFontScale = integer / 100f)
+                .build());
+
         builder.setSavingRunnable(CobblestatsClientConfig::save);
         return builder.build();
     }
