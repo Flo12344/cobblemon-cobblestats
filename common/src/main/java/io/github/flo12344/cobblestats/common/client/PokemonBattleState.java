@@ -24,6 +24,15 @@ public class PokemonBattleState {
         checkForZero();
     }
 
+    public void switchBoost(String boost, PokemonBattleState other) {
+        int o = other.states.getOrDefault(boost, 0);
+        int t = states.getOrDefault(boost, 0);
+        other.states.put(boost, t);
+        this.states.put(boost, o);
+        other.checkForZero();
+        checkForZero();
+    }
+
     public void clearAllBoosts(boolean negativeOnly) {
         if (negativeOnly) {
             List<String> keysToRemove = new ArrayList<>();

@@ -254,10 +254,41 @@ public class BattleProcess {
                 BattleStateTracker.clearAllBoosts(current_pkm, true);
                 break;
             case "copyboost":
-                BattleStateTracker.copyBoosts(getPkm(object_args), getTarget(object_args));
+                BattleStateTracker.copyBoosts(current_pkm, accessPokemonName(object_args, 1));
                 break;
 
             case "used_move_on":
+                current_pkm = getPkm(object_args);
+                current_atk = ((TranslatableContents) ((MutableComponent) object_args[1]).getContents()).getKey().split("\\.")[2];
+                String target_pkm = accessPokemonName(object_args, 2);
+                PokemonBattleState current = BattleStateTracker.getPokemon(current_pkm);
+                PokemonBattleState target = BattleStateTracker.getPokemon(target_pkm);
+                switch (current_atk) {
+                    case "powerswap":
+                        current.switchBoost("attack", target);
+                        current.switchBoost("special_attack", target);
+                        break;
+                    case "speedswap":
+                        current.switchBoost("speed", target);
+                        break;
+                    case "guardswap":
+                        current.switchBoost("defence", target);
+                        current.switchBoost("special_defence", target);
+                        break;
+                    case "generic":
+                    case "heartswap":
+                        current.switchBoost("attack", target);
+                        current.switchBoost("special_attack", target);
+                        current.switchBoost("defence", target);
+                        current.switchBoost("special_defence", target);
+                        current.switchBoost("speed", target);
+                        current.switchBoost("accuracy", target);
+                        current.switchBoost("evasion", target);
+                        break;
+                    default:
+                        break;
+                }
+                break;
             case "used_move":
                 current_pkm = getPkm(object_args);
                 current_atk = ((TranslatableContents) ((MutableComponent) object_args[1]).getContents()).getKey().split("\\.")[2];
@@ -412,29 +443,15 @@ public class BattleProcess {
     }
 
     private static String getPkm(Object[] target) {
-        if (((TranslatableContents) ((MutableComponent) target[0]).getContents()).getKey().contains("species")) {
-            return ((TranslatableContents) ((MutableComponent) target[0]).getContents()).getKey();
-        } else {
-            var data = ((TranslatableContents) ((MutableComponent) target[0]).getContents()).getArgs();
-            String pokemon;
-            if (data[1] instanceof MutableComponent)
-                pokemon = ((TranslatableContents) ((MutableComponent) data[1]).getContents()).getKey();
-            else
-                pokemon = data[1].toString();
-            String owner;
-            if (data[0] instanceof MutableComponent)
-                owner = ((TranslatableContents) ((MutableComponent) data[0]).getContents()).getKey();
-            else
-                owner = data[0].toString();
-            return owner + "/" + pokemon;
-        }
+        return accessPokemonName(target, 0);
     }
 
-    private static String getTarget(Object[] target) {
-        if (((TranslatableContents) ((MutableComponent) target[1]).getContents()).getKey().contains("species")) {
-            return ((TranslatableContents) ((MutableComponent) target[1]).getContents()).getKey();
+
+    private static String accessPokemonName(Object[] target, int offset) {
+        if (((TranslatableContents) ((MutableComponent) target[offset]).getContents()).getKey().contains("species")) {
+            return ((TranslatableContents) ((MutableComponent) target[offset]).getContents()).getKey();
         } else {
-            var data = ((TranslatableContents) ((MutableComponent) target[1]).getContents()).getArgs();
+            var data = ((TranslatableContents) ((MutableComponent) target[offset]).getContents()).getArgs();
             String pokemon;
             if (data[1] instanceof MutableComponent)
                 pokemon = ((TranslatableContents) ((MutableComponent) data[1]).getContents()).getKey();
