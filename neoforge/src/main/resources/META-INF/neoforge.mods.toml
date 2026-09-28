@@ -34,5 +34,13 @@ versionRange = "[1.6,)"
 ordering = "AFTER"
 side = "BOTH"
 
+
+[[dependencies.cobblestats]]
+modId = "cloth_config"
+type = "optional"
+versionRange = "[15.0.140,)"
+ordering = "AFTER"
+side = "CLIENT"
+
 [[mixins]]
 config = "cobblestats.mixins.json"

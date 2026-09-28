@@ -39,6 +39,8 @@ dependencies {
     //needed for cobblemon
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin")}")
     modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}") { isTransitive = false }
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_version")}") { exclude("net.fabricmc.fabric-api") }
+    modCompileOnly("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements"))

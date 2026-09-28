@@ -21,6 +21,8 @@ allprojects {
         maven("https://maven.neoforged.net/releases")
         maven("https://api.modrinth.com/maven")
         maven("https://thedarkcolour.github.io/KotlinForForge/")
+        maven("https://maven.shedaniel.me/")
+        maven("https://maven.terraformersmc.com/releases/")
     }
 
     tasks.getByName<Test>("test") {

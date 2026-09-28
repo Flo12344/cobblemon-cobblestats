@@ -16,6 +16,9 @@
     ],
     "client": [
       "io.github.flo12344.cobblestats.CobbleStatsClient"
+    ],
+    "modmenu": [
+      "io.github.flo12344.cobblestats.client.CobbleStatsModMenu"
     ]
   },
   "mixins": [
@@ -23,6 +26,10 @@
   ],
   "depends": {
     "minecraft": "1.21.1",
-    "cobblemon": ">=1.6.0"
+    "cobblemon": ">=1.8.1"
+  },
+  "suggests": {
+    "modmenu": ">=11.0.5",
+    "cloth_config": ">=15.0.140"
   }
 }

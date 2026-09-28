@@ -40,6 +40,7 @@ dependencies {
         exclude("net.neoforged.fancymodloader", "loader")
     }
     modCompileOnly("maven.modrinth:cobblemonraiddens:${property("cobblemonraiddens_version")}+1.21.1-neoforge")
+    modApi("me.shedaniel.cloth:cloth-config-neoforge:${property("cloth_version")}")
 
     implementation(project(":common", configuration = "namedElements"))
     "developmentNeoForge"(project(":common", configuration = "namedElements")) {
