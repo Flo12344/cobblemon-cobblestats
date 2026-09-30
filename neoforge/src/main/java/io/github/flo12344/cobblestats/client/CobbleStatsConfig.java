@@ -47,6 +47,18 @@ public class CobbleStatsConfig {
                 .setSaveConsumer(integer -> CobblestatsClientConfig.OtherFontScale = integer / 100f)
                 .build());
 
+        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.pokeball_size"),
+                        (int) (CobblestatsClientConfig.PokeballSize * 100), 25, 250)
+                .setDefaultValue(50)
+                .setSaveConsumer(integer -> CobblestatsClientConfig.PokeballSize = integer / 100f)
+                .build());
+
+        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.type_size"),
+                        (int) (CobblestatsClientConfig.TypeSize * 100), 25, 250)
+                .setDefaultValue(50)
+                .setSaveConsumer(integer -> CobblestatsClientConfig.TypeSize = integer / 100f)
+                .build());
+
         builder.setSavingRunnable(CobblestatsClientConfig::save);
         return builder.build();
     }
