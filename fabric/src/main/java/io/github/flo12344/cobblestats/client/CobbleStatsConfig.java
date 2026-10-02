@@ -41,6 +41,12 @@ public class CobbleStatsConfig {
                 .setSaveConsumer(integer -> CobblestatsClientConfig.StatsFontScale = integer / 100f)
                 .build());
 
+        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.weather_room_font_scale"),
+                        (int) (CobblestatsClientConfig.WeatherRoomFontScale * 100), 50, 250)
+                .setDefaultValue(100)
+                .setSaveConsumer(integer -> CobblestatsClientConfig.WeatherRoomFontScale = integer / 100f)
+                .build());
+
         general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.other_font_scale"),
                         (int) (CobblestatsClientConfig.OtherFontScale * 100), 25, 250)
                 .setDefaultValue(50)

@@ -32,6 +32,7 @@ public class CobblestatsClientConfig {
     public static boolean ShowTerrain = true;
     public static boolean ShowOther = true;
     public static float StatsFontScale = 0.5f;
+    public static float WeatherRoomFontScale = 1f;
     public static float OtherFontScale = 0.5f;
     public static float PokeballSize = 0.45f;
     public static float TypeSize = 0.45f;
@@ -50,6 +51,7 @@ public class CobblestatsClientConfig {
 
         json.addProperty("StatsRenderType", StatsRenderType.toString());
         json.addProperty("StatsFontScale", StatsFontScale);
+        json.addProperty("WeatherRoomFontScale", WeatherRoomFontScale);
         json.addProperty("OtherFontScale", OtherFontScale);
         json.addProperty("PokeballSize", PokeballSize);
         json.addProperty("TypeSize", TypeSize);
@@ -120,6 +122,9 @@ public class CobblestatsClientConfig {
             }
             if (json.has("TypeSize")) {
                 TypeSize = json.get("TypeSize").getAsFloat();
+            }
+            if (json.has("WeatherRoomFontScale")) {
+                WeatherRoomFontScale = json.get("WeatherRoomFontScale").getAsFloat();
             }
         } catch (Exception e) {
             LogUtils.getLogger().error("Failed to save CobbleStats config:", e);
