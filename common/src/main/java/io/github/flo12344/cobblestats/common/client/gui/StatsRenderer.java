@@ -15,7 +15,7 @@ public class StatsRenderer {
     public static final ResourceLocation BADGE =
             ResourceLocation.fromNamespaceAndPath("cobblestats", "badge");
     public static final ResourceLocation BADGE_INVERTED =
-            ResourceLocation.fromNamespaceAndPath("cobblestats", "badge-inverted");
+            ResourceLocation.fromNamespaceAndPath("cobblestats", "badge_inverted");
 
     public static void draw(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, boolean isCompact, String key, float original_X, float original_Y) {
         var mc = Minecraft.getInstance();
@@ -67,7 +67,8 @@ public class StatsRenderer {
                 }
                 x -= (textWidth + (i > 0 ? 4 : 0));
             }
-            drawBadge(context, mc.font, s, (int) x, (int) y, i++, left);
+            RenderUtils.drawBadge(context, left ? BADGE : BADGE_INVERTED, s, x, (int) y, 4, 1, 8, 4, i++);
+//            drawBadge(context, mc.font, s, (int) x, (int) y, i++, left);
             if (left)
                 x += (textWidth + (i > 0 ? 5 : 1));
         }

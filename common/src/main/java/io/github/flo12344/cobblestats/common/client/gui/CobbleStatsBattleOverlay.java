@@ -86,7 +86,7 @@ public class CobbleStatsBattleOverlay {
             }
         }
         if (CobblestatsClientConfig.ShowHazards)
-            HazardRenderer.draw(context, left, isCompact, mc);
+            HazardRenderer.draw(context, left, isCompact);
         if (!ClientData.SERVER_COMPAT)
             return;
         if (!left && activeBattlePokemon.getActor().getType() == ActorType.WILD && !CobblestatsClientConfig.ForceHidePokeball)
