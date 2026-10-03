@@ -1,6 +1,5 @@
 package io.github.flo12344.cobblestats.common.client.gui;
 
-import io.github.flo12344.cobblestats.common.client.CobblestatsClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,8 +22,7 @@ public class RenderUtils {
         return x + (int) (font.width(text) * size) + margin;
     }
 
-    public static void drawBadge(GuiGraphics ctx, ResourceLocation res, String text, int x, int y, int xOffset, int yOffset, int widthOffset, int heightOffset, int depth) {
-        float size = CobblestatsClientConfig.StatsFontScale;
+    public static void drawBadge(GuiGraphics ctx, ResourceLocation res, String text, int x, int y, int xOffset, int yOffset, int widthOffset, int heightOffset, int depth, float size) {
         var font = Minecraft.getInstance().font;
         int textWidth = (int) (font.width(text) * size);
         int textHeight = (int) (font.lineHeight * size);

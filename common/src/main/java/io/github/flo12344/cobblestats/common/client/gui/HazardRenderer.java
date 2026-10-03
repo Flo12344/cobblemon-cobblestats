@@ -26,14 +26,14 @@ public class HazardRenderer {
                 text += " " + integer;
             int _x = VERTICAL_INSET;
             if (!left) {
-                _x = Minecraft.getInstance().getWindow().getGuiScaledWidth() - _x - ((int) (font.width(text) * scale)) - 12 - 8;
+                _x = Minecraft.getInstance().getWindow().getGuiScaledWidth() - _x - ((int) (font.width(text) * scale)) - 8;
             }
             if (left)
-                RenderUtils.drawBadge(context, BADGE, text, _x, (int) _y[0], 4, 2, 12, 7, 1);
+                RenderUtils.drawBadge(context, BADGE, text, _x, (int) _y[0], 4, 2, 12, 7, 1, scale);
             else
-                RenderUtils.drawBadge(context, BADGE_INVERTED, text, _x, (int) _y[0], 8, 2, 12, 7, 1);
+                RenderUtils.drawBadge(context, BADGE_INVERTED, text, _x, (int) _y[0], 8, 2, 12, 7, 1, scale);
 
-            _y[0] += (int) (font.lineHeight * scale) + 3;
+            _y[0] += (int) (font.lineHeight * scale) + 10;
         }
     }
 }

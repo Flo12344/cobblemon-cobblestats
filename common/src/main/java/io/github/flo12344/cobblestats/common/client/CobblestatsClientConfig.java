@@ -33,7 +33,7 @@ public class CobblestatsClientConfig {
     public static boolean ShowOther = true;
     public static float StatsFontScale = 0.5f;
     public static float WeatherRoomFontScale = 1f;
-    public static float OtherFontScale = 0.5f;
+    public static float OtherFontScale = 1f;
     public static float PokeballSize = 0.45f;
     public static float TypeSize = 0.45f;
 

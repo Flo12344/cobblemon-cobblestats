@@ -67,7 +67,7 @@ public class StatsRenderer {
                 }
                 x -= (textWidth + (i > 0 ? 4 : 0));
             }
-            RenderUtils.drawBadge(context, left ? BADGE : BADGE_INVERTED, s, x, (int) y, 4, 1, 8, 4, i++);
+            RenderUtils.drawBadge(context, left ? BADGE : BADGE_INVERTED, s, x, (int) y, 4, 1, 8, 4, i++, CobblestatsClientConfig.StatsFontScale);
 //            drawBadge(context, mc.font, s, (int) x, (int) y, i++, left);
             if (left)
                 x += (textWidth + (i > 0 ? 5 : 1));

@@ -16,7 +16,7 @@ public class BattleProcess {
         if (MainActionSplit.length < 3)
             return new Object[]{current_atk, current_pkm, tmp_stat_holder};
         if (Objects.equals(MainActionSplit[1], "status")) {
-            if (Objects.equals(MainActionSplit[2], "sleep") && Objects.equals(MainActionSplit[3], "cure")) {
+            if (Objects.equals(MainActionSplit[2], "sleep")) {
                 BattleStateTracker.getPokemon(current_pkm).removeExtraEffect("yawn");
             }
         }

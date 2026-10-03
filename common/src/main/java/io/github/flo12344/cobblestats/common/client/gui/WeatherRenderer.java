@@ -24,7 +24,7 @@ public class WeatherRenderer {
         }
         var mc = Minecraft.getInstance();
         int x_pos = mc.getWindow().getGuiScaledWidth() / 2 - ((int) ((float) mc.font.width(text) / 2 * scale) - 8);
-        RenderUtils.drawBadge(context, BADGE, text, x_pos, y_pos[0], 8, 1, 16, 6, 1);
+        RenderUtils.drawBadge(context, BADGE, text, x_pos, y_pos[0], 8, 2, 16, 8, 1, scale);
         y_pos[0] += (int) (mc.font.lineHeight * scale) + 5;
     }
 }
