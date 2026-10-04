@@ -18,7 +18,7 @@ public class HazardRenderer {
     public static void draw(GuiGraphics context, boolean left, boolean isCompact) {
         var font = Minecraft.getInstance().font;
         final int[] _y = {(VERTICAL_INSET + ((isCompact ? COMPACT_PORTRAIT_DIAMETER : PORTRAIT_DIAMETER) * 4))};
-        float scale = CobblestatsClientConfig.OtherFontScale;
+        float scale = CobblestatsClientConfig.HazardFontScale;
         for (var entry : TerrainBattleState.getHazardStates(left).entrySet()) {
             String text = entry.getKey();
             int integer = entry.getValue();

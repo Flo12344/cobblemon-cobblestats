@@ -18,15 +18,18 @@ public class CobbleStatsConfig {
         ConfigCategory general = builder.getOrCreateCategory(Component.translatable("cobblestats.config.category.general"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        for (CobblestatsConfigGuiHelper.ConfigEntry entry : CobblestatsConfigGuiHelper.entries) {
-            general.addEntry(entryBuilder.startBooleanToggle(Component.translatable("cobblestats.config." + entry.translationKey()), entry.getter().get())
+        var visibility = entryBuilder.startSubCategory(Component.translatable("cobblestats.config.category.visibility"));
+        for (CobblestatsConfigGuiHelper.ConfigEntry entry : CobblestatsConfigGuiHelper.VisiblitySettings) {
+            visibility.add(entryBuilder.startBooleanToggle(Component.translatable("cobblestats.config." + entry.translationKey()), entry.getter().get())
                     .setTooltip(Component.translatable("cobblestats.config." + entry.translationKey() + ".description"))
                     .setDefaultValue(entry.defaults())
                     .setSaveConsumer(entry.setter())
                     .build());
         }
+        general.addEntry(visibility.build());
 
-        general.addEntry(entryBuilder.startSelector(Component.translatable("cobblestats.config.stats_render_type"),
+        var visual = entryBuilder.startSubCategory(Component.translatable("cobblestats.config.category.visual"));
+        visual.add(entryBuilder.startSelector(Component.translatable("cobblestats.config.stats_render_type"),
                         CobblestatsClientConfig.StatRender.values(),
                         CobblestatsClientConfig.StatsRenderType)
                 .setDefaultValue(CobblestatsClientConfig.StatRender.MULTIPLIER)
@@ -35,35 +38,28 @@ public class CobbleStatsConfig {
                 .build()
         );
 
-        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.stats_font_scale"),
-                        (int) (CobblestatsClientConfig.StatsFontScale * 100), 25, 150)
-                .setDefaultValue(50)
-                .setSaveConsumer(integer -> CobblestatsClientConfig.StatsFontScale = integer / 100f)
-                .build());
 
-        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.weather_room_font_scale"),
-                        (int) (CobblestatsClientConfig.WeatherRoomFontScale * 100), 50, 250)
-                .setDefaultValue(100)
-                .setSaveConsumer(integer -> CobblestatsClientConfig.WeatherRoomFontScale = integer / 100f)
-                .build());
-
-        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.other_font_scale"),
-                        (int) (CobblestatsClientConfig.OtherFontScale * 100), 25, 250)
-                .setDefaultValue(50)
-                .setSaveConsumer(integer -> CobblestatsClientConfig.OtherFontScale = integer / 100f)
-                .build());
-
-        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.pokeball_size"),
+        visual.add(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.pokeball_size"),
                         (int) (CobblestatsClientConfig.PokeballSize * 100), 25, 250)
                 .setDefaultValue(50)
                 .setSaveConsumer(integer -> CobblestatsClientConfig.PokeballSize = integer / 100f)
                 .build());
 
-        general.addEntry(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.type_size"),
+        visual.add(entryBuilder.startIntSlider(Component.translatable("cobblestats.config.type_size"),
                         (int) (CobblestatsClientConfig.TypeSize * 100), 25, 250)
                 .setDefaultValue(50)
                 .setSaveConsumer(integer -> CobblestatsClientConfig.TypeSize = integer / 100f)
                 .build());
+        general.addEntry(visual.build());
+
+        var sub = entryBuilder.startSubCategory(Component.translatable("cobblestats.config.category.font"));
+        for (var entry : CobblestatsConfigGuiHelper.FontSizeSettings) {
+            sub.add(entryBuilder.startIntSlider(Component.translatable("cobblestats.config." + entry.translationKey()), (int) (entry.getter().get() * 100), 50, 150)
+                    .setDefaultValue(entry.defaults())
+                    .setSaveConsumer(integer -> entry.setter().accept(integer / 100f))
+                    .build());
+        }
+        general.addEntry(sub.build());
 
         builder.setSavingRunnable(CobblestatsClientConfig::save);
         return builder.build();

@@ -2,7 +2,7 @@ package io.github.flo12344.cobblestats.common.client.config;
 
 import io.github.flo12344.cobblestats.common.client.CobblestatsClientConfig;
 
-import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -11,7 +11,7 @@ public class CobblestatsConfigGuiHelper {
                               Boolean defaults) {
     }
 
-    public static final List<ConfigEntry> entries = List.of(
+    public static final Set<ConfigEntry> VisiblitySettings = Set.of(
             new ConfigEntry("accurate_pokeball", () -> CobblestatsClientConfig.AccuratePokeballIfAvailable,
                     v -> CobblestatsClientConfig.AccuratePokeballIfAvailable = v, true),
             new ConfigEntry("force_hide_pokeball", () -> CobblestatsClientConfig.ForceHidePokeball,
@@ -28,6 +28,19 @@ public class CobblestatsConfigGuiHelper {
                     v -> CobblestatsClientConfig.ShowOther = v, true),
             new ConfigEntry("show_stats_stages", () -> CobblestatsClientConfig.ShowStatsStages,
                     v -> CobblestatsClientConfig.ShowStatsStages = v, true)
+    );
+
+    public record FontSizeEntry(String translationKey, Supplier<Float> getter, Consumer<Float> setter,
+                                Integer defaults) {
+    }
+
+    public static final Set<FontSizeEntry> FontSizeSettings = Set.of(
+            new FontSizeEntry("stats_font_scale", () -> CobblestatsClientConfig.StatsFontScale,
+                    v -> CobblestatsClientConfig.StatsFontScale = v, 75),
+            new FontSizeEntry("weather_room_font_scale", () -> CobblestatsClientConfig.WeatherRoomFontScale,
+                    v -> CobblestatsClientConfig.WeatherRoomFontScale = v, 75),
+            new FontSizeEntry("hazard_font_scale", () -> CobblestatsClientConfig.HazardFontScale,
+                    v -> CobblestatsClientConfig.HazardFontScale = v, 75)
     );
 
 }

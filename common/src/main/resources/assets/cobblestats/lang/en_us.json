@@ -30,7 +30,11 @@
   "cobblestats.config.stats_render_type.multiplier": "0.75x 1.333x 1.667x",
   "cobblestats.config.stats_render_type.number": "-1 +1 +2",
   "cobblestats.config.stats_font_scale": "Stats font size",
-  "cobblestats.config.other_font_scale": "Other font size",
+  "cobblestats.config.weather_room_font_scale": "Weather/Room font size",
+  "cobblestats.config.hazard_font_scale": "Hazard font size",
   "cobblestats.config.pokeball_size": "Pokeball size",
-  "cobblestats.config.type_size": "Type size"
+  "cobblestats.config.type_size": "Type size",
+  "cobblestats.config.category.visibility": "Visibility",
+  "cobblestats.config.category.visual": "Visual",
+  "cobblestats.config.category.font": "Font"
 }

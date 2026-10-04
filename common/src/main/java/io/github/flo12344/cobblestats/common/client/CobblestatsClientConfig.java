@@ -33,7 +33,7 @@ public class CobblestatsClientConfig {
     public static boolean ShowOther = true;
     public static float StatsFontScale = 0.5f;
     public static float WeatherRoomFontScale = 1f;
-    public static float OtherFontScale = 1f;
+    public static float HazardFontScale = 1f;
     public static float PokeballSize = 0.45f;
     public static float TypeSize = 0.45f;
 
@@ -52,7 +52,7 @@ public class CobblestatsClientConfig {
         json.addProperty("StatsRenderType", StatsRenderType.toString());
         json.addProperty("StatsFontScale", StatsFontScale);
         json.addProperty("WeatherRoomFontScale", WeatherRoomFontScale);
-        json.addProperty("OtherFontScale", OtherFontScale);
+        json.addProperty("HazardFontScale", HazardFontScale);
         json.addProperty("PokeballSize", PokeballSize);
         json.addProperty("TypeSize", TypeSize);
         return json;
@@ -114,8 +114,8 @@ public class CobblestatsClientConfig {
             if (json.has("StatsFontScale")) {
                 StatsFontScale = json.get("StatsFontScale").getAsFloat();
             }
-            if (json.has("OtherFontScale")) {
-                OtherFontScale = json.get("OtherFontScale").getAsFloat();
+            if (json.has("HazardFontScale")) {
+                HazardFontScale = json.get("HazardFontScale").getAsFloat();
             }
             if (json.has("PokeballSize")) {
                 PokeballSize = json.get("PokeballSize").getAsFloat();

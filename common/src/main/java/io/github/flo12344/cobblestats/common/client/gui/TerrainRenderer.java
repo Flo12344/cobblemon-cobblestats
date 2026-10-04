@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 
 public class TerrainRenderer {
     public static void draw(GuiGraphics context, int[] y_pos) {
-        final float scale = CobblestatsClientConfig.OtherFontScale;
+        final float scale = CobblestatsClientConfig.HazardFontScale;
         var terrain = TerrainBattleState.getTerrainState();
         String text = ((String) terrain[0]);
         if (((Integer) terrain[1]) < 0) {
