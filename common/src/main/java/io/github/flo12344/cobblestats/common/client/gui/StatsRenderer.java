@@ -5,7 +5,6 @@ import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon;
 import io.github.flo12344.cobblestats.common.client.BattleStateTracker;
 import io.github.flo12344.cobblestats.common.client.CobblestatsClientConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
@@ -72,26 +71,5 @@ public class StatsRenderer {
             if (left)
                 x += (textWidth + (i > 0 ? 5 : 1));
         }
-    }
-
-    private static void drawBadge(GuiGraphics ctx, Font font, String text, int x, int y, int depth, boolean left) {
-        float size = CobblestatsClientConfig.StatsFontScale;
-        int textWidth = (int) (font.width(text) * size);
-        int textHeight = (int) (font.lineHeight * size);
-
-        ctx.pose().pushPose();
-        ctx.pose().translate(0, 0, -depth);
-
-        ctx.blitSprite(left ? BADGE : BADGE_INVERTED, x - 4, y - 1, textWidth + 8, textHeight + 4);
-
-        ctx.pose().popPose();
-
-        ctx.pose().pushPose();
-        ctx.pose().translate(x, y + 1, 0);
-        ctx.pose().pushPose();
-        ctx.pose().scale(size, size, 0);
-        ctx.drawString(font, text, 0, 0, 16777215, true);
-        ctx.pose().popPose();
-        ctx.pose().popPose();
     }
 }
