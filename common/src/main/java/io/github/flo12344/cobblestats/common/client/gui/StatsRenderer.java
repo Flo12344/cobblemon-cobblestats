@@ -34,7 +34,7 @@ public class StatsRenderer {
                 COMPACT_TILE_WIDTH - COMPACT_PORTRAIT_DIAMETER :
                 TILE_WIDTH - PORTRAIT_DIAMETER;
         if (!left) {
-            x = mc.getWindow().getGuiScaledWidth() - x - infoStart;
+            x = mc.getWindow().getGuiScaledWidth() - x - infoStart - 1;
             maxX = x - maxStatLength;
         } else {
             x = x + infoStart + 5;
