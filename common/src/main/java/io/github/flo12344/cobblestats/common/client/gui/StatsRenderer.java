@@ -16,7 +16,7 @@ public class StatsRenderer {
     public static final ResourceLocation BADGE_INVERTED =
             ResourceLocation.fromNamespaceAndPath("cobblestats", "badge_inverted");
 
-    public static void draw(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, boolean isCompact, String key, float original_X, float original_Y) {
+    public static void draw(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, boolean isCompact, String key, int rank, float original_Y) {
         var mc = Minecraft.getInstance();
         var stats = BattleStateTracker.getChangedStats(key);
 

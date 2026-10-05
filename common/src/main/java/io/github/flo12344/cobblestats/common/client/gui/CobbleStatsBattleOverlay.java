@@ -33,20 +33,14 @@ public class CobbleStatsBattleOverlay {
         int playerNumberOffset = (Character.getNumericValue(activeBattlePokemon.getActorShowdownId().charAt(1)) - 1) / 2 * 10;
 
         float original_Y = VERTICAL_INSET + rank * (isCompact ? COMPACT_VERTICAL_SPACING : VERTICAL_SPACING) + (left ? playerNumberOffset : (battle.getBattleFormat().getBattleType().getActorsPerSide() - 1) * 10 - playerNumberOffset);
-        float original_X = activeBattlePokemon.getXDisplacement();
 
         var portraitOffsetY = isCompact ? COMPACT_PORTRAIT_OFFSET_Y : PORTRAIT_OFFSET_Y;
         var portraitDiameter = isCompact ? COMPACT_PORTRAIT_DIAMETER : PORTRAIT_DIAMETER;
-        var infoOffsetX = isCompact ? COMPACT_INFO_OFFSET_X : INFO_OFFSET_X;
-        var titleWidth = isCompact ? COMPACT_TILE_WIDTH : TILE_WIDTH;
-
-        original_X += left ? infoOffsetX + portraitDiameter : 0;
         original_Y += portraitOffsetY + portraitDiameter * .75F;
 
         String key = getKey(activeBattlePokemon);
 
-        original_X += 5;
-        StatsRenderer.draw(context, activeBattlePokemon, left, isCompact, key, original_X, original_Y);
+        StatsRenderer.draw(context, activeBattlePokemon, left, isCompact, key, rank, original_Y);
     }
 
 
