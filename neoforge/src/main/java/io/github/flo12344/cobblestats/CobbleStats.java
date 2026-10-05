@@ -26,6 +26,9 @@ public class CobbleStats {
             modContainer.registerExtensionPoint(IConfigScreenFactory.class,
                     (container, parent) -> CobbleStatsConfig.getConfigScreen(parent));
         }
+        if (ModList.get().isLoaded("cobblemonxpbar")) {
+            ClientData.XPBAR = true;
+        }
 
         NeoForge.EVENT_BUS.addListener(ClientPlayerNetworkEvent.LoggingIn.class, loggingIn -> {
             Minecraft minecraft = Minecraft.getInstance();

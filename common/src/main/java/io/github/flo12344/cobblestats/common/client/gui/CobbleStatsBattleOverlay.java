@@ -16,6 +16,8 @@ import static com.cobblemon.mod.common.client.gui.battle.BattleOverlay.*;
 
 public class CobbleStatsBattleOverlay {
     public static boolean focused = true;
+    public final static int XpBarYOffset = 5;
+    public final static int XpBarXOffset = 3;
 
     public static void RenderBefore(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, int rank, boolean isHovered, boolean isCompact) {
         var mc = Minecraft.getInstance();

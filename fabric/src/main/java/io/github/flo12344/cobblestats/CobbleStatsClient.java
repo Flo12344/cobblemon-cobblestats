@@ -8,14 +8,18 @@ import io.github.flo12344.cobblestats.net.FabricNetworkManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 
 public class CobbleStatsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-//        CobbleStatsNetworkingRegistration.register();
         CobbleStatsNetworkingRegistration.registerClient();
+
+        FabricLoader.getInstance().getModContainer("cobblemonxpbar").ifPresent(modContainer -> {
+            ClientData.XPBAR = true;
+        });
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             Minecraft minecraft = Minecraft.getInstance();

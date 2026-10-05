@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon;
 import io.github.flo12344.cobblestats.common.client.BattleStateTracker;
 import io.github.flo12344.cobblestats.common.client.CobblestatsClientConfig;
+import io.github.flo12344.cobblestats.common.client.net.ClientData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +26,7 @@ public class StatsRenderer {
         var slotCount = battle.getBattleFormat().getBattleType().getSlotsPerActor();
 
         int maxX;
-        var x = HORIZONTAL_INSET + (slotCount - 1 - 1) * HORIZONTAL_SPACING;
+        var x = HORIZONTAL_INSET + (slotCount - rank - 1) * HORIZONTAL_SPACING;
         int infoStart = isCompact ?
                 COMPACT_PORTRAIT_DIAMETER + COMPACT_PORTRAIT_OFFSET_X * 3 :
                 PORTRAIT_DIAMETER + PORTRAIT_OFFSET_X * 3;
@@ -50,6 +51,10 @@ public class StatsRenderer {
             }
         }
         float y = original_Y;
+        if (ClientData.XPBAR && left) {
+            y += CobbleStatsBattleOverlay.XpBarYOffset;
+            x -= CobbleStatsBattleOverlay.XpBarXOffset;
+        }
         int i = 0;
         float scale = CobblestatsClientConfig.StatsFontScale;
         for (var s : stats) {
