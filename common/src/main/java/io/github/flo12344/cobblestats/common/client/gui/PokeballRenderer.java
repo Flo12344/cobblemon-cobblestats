@@ -3,6 +3,7 @@ package io.github.flo12344.cobblestats.common.client.gui;
 import com.cobblemon.mod.common.api.gui.GuiUtilsKt;
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon;
 import com.cobblemon.mod.common.client.battle.ClientBattle;
+import com.cobblemon.mod.common.client.gui.battle.BattleOverlay;
 import io.github.flo12344.cobblestats.common.client.CobblestatsClientConfig;
 import io.github.flo12344.cobblestats.common.client.net.ClientData;
 import net.minecraft.client.Minecraft;
@@ -19,7 +20,12 @@ public class PokeballRenderer {
             pokeballX = mc.getWindow().getGuiScaledWidth() - pokeballX - (isCompact ? COMPACT_TILE_WIDTH : TILE_WIDTH);
         }
         final float[] x = {pokeballX + battle.getBattleFormat().getBattleType().getSlotsPerActor() + (left ? infoOffsetX + portraitDiameter : 0)};
-        final int _y_pos = 4;
+        double alpha;
+        if (!CobbleStatsBattleOverlay.focused) {
+            alpha = BattleOverlay.MIN_OPACITY;
+        } else {
+            alpha = 1d;
+        }
         var matrix = context.pose();
         matrix.pushPose();
         matrix.translate(x[0], 4, 0);
@@ -46,7 +52,7 @@ public class PokeballRenderer {
                     ResourceLocation res = ResourceLocation.fromNamespaceAndPath("cobblemon", "textures/gui/ball/" + pokeball + ".png");
 
                     GuiUtilsKt.blitk(matrix, res,
-                            pos, 0, 20, 18, 0, 0, 18, 44, 5, color_shift, color_shift, color_shift, 1);
+                            pos, 0, 20, 18, 0, 0, 18, 44, 5, color_shift, color_shift, color_shift, (float) alpha);
                     pos += 18 + margin;
                 }
             }

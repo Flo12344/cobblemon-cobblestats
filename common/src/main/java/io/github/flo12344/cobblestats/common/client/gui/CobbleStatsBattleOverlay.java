@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import static com.cobblemon.mod.common.client.gui.battle.BattleOverlay.*;
 
 public class CobbleStatsBattleOverlay {
+    public static boolean focused = true;
+
     public static void RenderBefore(GuiGraphics context, ActiveClientBattlePokemon activeBattlePokemon, boolean left, int rank, boolean isHovered, boolean isCompact) {
         var mc = Minecraft.getInstance();
 
@@ -26,6 +28,8 @@ public class CobbleStatsBattleOverlay {
         if (battle == null) {
             return;
         }
+
+        focused = !battle.getMinimised();
         int playerNumberOffset = (Character.getNumericValue(activeBattlePokemon.getActorShowdownId().charAt(1)) - 1) / 2 * 10;
 
         float original_Y = VERTICAL_INSET + rank * (isCompact ? COMPACT_VERTICAL_SPACING : VERTICAL_SPACING) + (left ? playerNumberOffset : (battle.getBattleFormat().getBattleType().getActorsPerSide() - 1) * 10 - playerNumberOffset);

@@ -1,5 +1,7 @@
 package io.github.flo12344.cobblestats.common.client.gui;
 
+import com.cobblemon.mod.common.client.gui.battle.BattleOverlay;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -26,10 +28,18 @@ public class RenderUtils {
         var font = Minecraft.getInstance().font;
         int textWidth = (int) (font.width(text) * size);
         int textHeight = (int) (font.lineHeight * size);
+        double alpha = 1d;
+        if (!CobbleStatsBattleOverlay.focused) {
+            alpha = BattleOverlay.MIN_OPACITY;
+        }
+        int a = (int) (alpha * 255);
+        int color = (a << 24) | 0xFFFFFF;
 
         ctx.pose().pushPose();
         ctx.pose().translate(0, 0, -depth);
-
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        ctx.setColor(1f, 1f, 1f, (float) alpha);
         ctx.blitSprite(res, x - xOffset, y - yOffset, textWidth + widthOffset, textHeight + heightOffset);
 
         ctx.pose().popPose();
@@ -37,9 +47,11 @@ public class RenderUtils {
         ctx.pose().pushPose();
         ctx.pose().translate(x, y + yOffset, 0);
         ctx.pose().pushPose();
-        ctx.pose().scale(size, size, 0);
-        ctx.drawString(font, text, 0, 0, 16777215, true);
+        ctx.pose().scale(size, size, 1.0f);
+        ctx.drawString(font, text, 0, 0, color, true);
         ctx.pose().popPose();
         ctx.pose().popPose();
+
+        RenderSystem.disableBlend();
     }
 }

@@ -2,6 +2,7 @@ package io.github.flo12344.cobblestats.common.client.gui;
 
 import com.cobblemon.mod.common.client.battle.ClientBattlePokemon;
 import com.cobblemon.mod.common.client.gui.TypeIcon;
+import com.cobblemon.mod.common.client.gui.battle.BattleOverlay;
 import io.github.flo12344.cobblestats.common.client.CobblestatsClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,6 +20,11 @@ public class TypeRenderer {
         var primaryType = currentForm.getPrimaryType();
         var secondaryType = currentForm.getSecondaryType();
         var x = (left ? portraitDiameter / 2 : Minecraft.getInstance().getWindow().getGuiScaledWidth() - portraitDiameter / 2);
+        double alpha = 1d;
+        if (!CobbleStatsBattleOverlay.focused) {
+            alpha = BattleOverlay.MIN_OPACITY;
+        }
+
         var matrix = context.pose();
         matrix.pushPose();
         matrix.translate(x, original_Y, 1000);
@@ -28,7 +34,7 @@ public class TypeRenderer {
                 primaryType,
                 secondaryType,
                 true, false,
-                18, 4, 1.0f);
+                18, 4, (float) alpha);
         icon.render(context);
         matrix.popPose();
     }
