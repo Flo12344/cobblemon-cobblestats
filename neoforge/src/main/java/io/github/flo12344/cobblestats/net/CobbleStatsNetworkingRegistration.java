@@ -3,8 +3,10 @@ package io.github.flo12344.cobblestats.net;
 import io.github.flo12344.cobblestats.common.client.net.payload.JoinServerPayload;
 import io.github.flo12344.cobblestats.common.net.payload.FaintOrRevivePayload;
 import io.github.flo12344.cobblestats.common.net.payload.PokemonCountInitializerPayload;
+import io.github.flo12344.cobblestats.common.net.payload.ServerStatsSyncForcePayload;
 import io.github.flo12344.cobblestats.net.client.FaintOrReviveHandler;
 import io.github.flo12344.cobblestats.net.client.PokemonCountInitializerHandler;
+import io.github.flo12344.cobblestats.net.client.ServerStatsForceSyncHandler;
 import io.github.flo12344.cobblestats.net.server.ServerJoinHandler;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -18,9 +20,10 @@ public class CobbleStatsNetworkingRegistration {
         final PayloadRegistrar registrar = event.registrar("1.0").optional();
         //server
         registrar.playToServer(JoinServerPayload.TYPE, JoinServerPayload.STREAM_CODEC, ServerJoinHandler::onPlayerLogin);
-        
+
         //client
         registrar.playToClient(PokemonCountInitializerPayload.TYPE, PokemonCountInitializerPayload.STREAM_CODEC, PokemonCountInitializerHandler::handlePokemonCountInitializer);
         registrar.playToClient(FaintOrRevivePayload.TYPE, FaintOrRevivePayload.STREAM_CODEC, FaintOrReviveHandler::handle);
+        registrar.playToClient(ServerStatsSyncForcePayload.TYPE, ServerStatsSyncForcePayload.STREAM_CODEC, ServerStatsForceSyncHandler::handleReconciliation);
     }
 }

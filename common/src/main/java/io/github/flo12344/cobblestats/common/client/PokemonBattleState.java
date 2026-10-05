@@ -8,6 +8,7 @@ import java.util.*;
 
 public class PokemonBattleState {
     private final Map<String, Integer> states = new HashMap<>();
+    public final Map<String, Deque<Integer>> pendingStatDeltas = new HashMap<>();
     private final Set<String> typesAdded = new HashSet<>();
     private final Set<String> extraEffects = new HashSet<>();
     private final Map<String, Integer> turnBasedExtraEffects = new HashMap<>();
@@ -19,7 +20,11 @@ public class PokemonBattleState {
 
     public void boostState(String stat, String severity, boolean isBoost) {
         int current = states.getOrDefault(stat, 0);
-        int newStage = Math.max(-6, Math.min(6, current + (isBoost ? intSeverity(severity) : -intSeverity(severity)))); // clamp between -6 and +6
+        int sev = (isBoost ? intSeverity(severity) : -intSeverity(severity));
+        if (pendingStatDeltas.containsKey(stat)) {
+            sev = pendingStatDeltas.get(stat).isEmpty() ? sev : pendingStatDeltas.get(stat).pop();
+        }
+        int newStage = Math.clamp(current + sev, -6, 6); // clamp between -6 and +6
         states.put(stat, newStage);
         checkForZero();
     }

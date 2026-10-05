@@ -3,8 +3,10 @@ package io.github.flo12344.cobblestats.net;
 import io.github.flo12344.cobblestats.common.client.net.payload.JoinServerPayload;
 import io.github.flo12344.cobblestats.common.net.payload.FaintOrRevivePayload;
 import io.github.flo12344.cobblestats.common.net.payload.PokemonCountInitializerPayload;
+import io.github.flo12344.cobblestats.common.net.payload.ServerStatsSyncForcePayload;
 import io.github.flo12344.cobblestats.net.client.FaintOrReviveHandler;
 import io.github.flo12344.cobblestats.net.client.PokemonCountInitializerHandler;
+import io.github.flo12344.cobblestats.net.client.ServerStatsForceSyncHandler;
 import io.github.flo12344.cobblestats.net.server.ServerJoinHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -20,11 +22,15 @@ public class CobbleStatsNetworkingRegistration {
         PayloadTypeRegistry.playC2S().register(FaintOrRevivePayload.TYPE, FaintOrRevivePayload.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(PokemonCountInitializerPayload.TYPE, PokemonCountInitializerPayload.STREAM_CODEC);
         PayloadTypeRegistry.playC2S().register(PokemonCountInitializerPayload.TYPE, PokemonCountInitializerPayload.STREAM_CODEC);
+
+        PayloadTypeRegistry.playS2C().register(ServerStatsSyncForcePayload.TYPE, ServerStatsSyncForcePayload.STREAM_CODEC);
+        PayloadTypeRegistry.playC2S().register(ServerStatsSyncForcePayload.TYPE, ServerStatsSyncForcePayload.STREAM_CODEC);
     }
 
     public static void registerClient() {
         ClientPlayNetworking.registerGlobalReceiver(PokemonCountInitializerPayload.TYPE, PokemonCountInitializerHandler::handlePokemonCountInitializer);
         ClientPlayNetworking.registerGlobalReceiver(FaintOrRevivePayload.TYPE, FaintOrReviveHandler::handle);
+        ClientPlayNetworking.registerGlobalReceiver(ServerStatsSyncForcePayload.TYPE, ServerStatsForceSyncHandler::handleReconciliation);
     }
 
 }

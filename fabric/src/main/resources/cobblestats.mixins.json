@@ -14,7 +14,8 @@
     "server.CSBattleEndMixin",
     "server.CSFaintInstructionMixin",
     "server.CSHealInstructionMixin",
-    "server.CSInitializeInstructionMixin"
+    "server.CSInitializeInstructionMixin",
+    "server.CSStatsForceSync"
   ],
   "injectors": {
     "defaultRequire": 1
