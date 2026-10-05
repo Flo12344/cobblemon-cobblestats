@@ -29,7 +29,7 @@ public class StatsRenderer {
         var x = HORIZONTAL_INSET + (slotCount - rank - 1) * HORIZONTAL_SPACING;
         int infoStart = isCompact ?
                 COMPACT_PORTRAIT_DIAMETER + COMPACT_PORTRAIT_OFFSET_X * 3 :
-                PORTRAIT_DIAMETER + PORTRAIT_OFFSET_X * 3;
+                PORTRAIT_DIAMETER + PORTRAIT_OFFSET_X * 2;
         int maxStatLength = isCompact ?
                 COMPACT_TILE_WIDTH - COMPACT_PORTRAIT_DIAMETER :
                 TILE_WIDTH - PORTRAIT_DIAMETER;
@@ -37,7 +37,7 @@ public class StatsRenderer {
             x = mc.getWindow().getGuiScaledWidth() - x - infoStart;
             maxX = x - maxStatLength;
         } else {
-            x = x + infoStart;
+            x = x + infoStart + 5;
             maxX = x + maxStatLength;
         }
         int ox = x + (left ? -9 : 9);
@@ -71,10 +71,11 @@ public class StatsRenderer {
                 }
                 x -= (textWidth + (i > 0 ? 4 : 0));
             }
-            RenderUtils.drawBadge(context, left ? BADGE : BADGE_INVERTED, s, x, (int) y, 4, 1, 8, 4, i++, CobblestatsClientConfig.StatsFontScale);
+            RenderUtils.drawBadge(context, left ? BADGE : BADGE_INVERTED, s, x, (int) y, 4, 1, 8, 4, i, CobblestatsClientConfig.StatsFontScale);
 //            drawBadge(context, mc.font, s, (int) x, (int) y, i++, left);
             if (left)
                 x += (textWidth + (i > 0 ? 5 : 1));
+            i++;
         }
     }
 }
