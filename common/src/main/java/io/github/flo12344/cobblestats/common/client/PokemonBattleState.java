@@ -51,9 +51,21 @@ public class PokemonBattleState {
         }
     }
 
+    public void invertAllBoosts() {
+        for (var k : states.keySet()) {
+            states.put(k, -states.getOrDefault(k, 0));
+        }
+        checkForZero();
+    }
+
+    public void invertBoost(String stat) {
+        states.put(stat, -states.getOrDefault(stat, 0));
+    }
+
     public void setAllBoosts(PokemonBattleState state) {
         states.clear();
         states.putAll(state.states);
+        checkForZero();
     }
 
 

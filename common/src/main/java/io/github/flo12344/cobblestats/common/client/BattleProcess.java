@@ -34,6 +34,10 @@ public class BattleProcess {
                         MainActionSplit[3],
                         Objects.equals(MainActionSplit[2], "boost"));
                 break;
+            case "invertboost":
+                BattleStateTracker.invertAllBoosts(current_pkm);
+                break;
+            case "clearboost":
             case "clearallboost":
                 BattleStateTracker.clearAllBoosts(current_pkm, false);
                 break;
@@ -234,7 +238,7 @@ public class BattleProcess {
     }
 
 
-    private static String accessPokemonName(Object[] target, int offset) {
+    public static String accessPokemonName(Object[] target, int offset) {
         if (((TranslatableContents) ((MutableComponent) target[offset]).getContents()).getKey().contains("species")) {
             return ((TranslatableContents) ((MutableComponent) target[offset]).getContents()).getKey();
         } else {

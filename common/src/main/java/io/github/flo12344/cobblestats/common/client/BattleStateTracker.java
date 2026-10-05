@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BattleStateTracker {
-    private static final Map<String, PokemonBattleState> battleStateMap = new HashMap<>();
+    public static final Map<String, PokemonBattleState> battleStateMap = new HashMap<>();
 
     public BattleStateTracker() {
     }
@@ -21,6 +21,12 @@ public class BattleStateTracker {
         if (!battleStateMap.containsKey(name))
             return;
         battleStateMap.get(name).clearAllBoosts(negativeOnly);
+    }
+
+    public static void invertAllBoosts(String name) {
+        if (!battleStateMap.containsKey(name))
+            return;
+        battleStateMap.get(name).invertAllBoosts();
     }
 
     public static void copyBoosts(String name, String target) {
